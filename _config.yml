@@ -1,4 +1,5 @@
 markdown: kramdown
 
 # profile links
-github: evan-tan
+accounts:
+  github: evan-tan
