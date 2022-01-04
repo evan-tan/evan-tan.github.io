@@ -1,8 +1,4 @@
 markdown: kramdown
 
 # profile links
-accounts:
-  github: evan-tan
-
-plugins:
-  - jekyll-target-blank
+github: evan-tan
