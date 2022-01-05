@@ -8,6 +8,6 @@ layout: default
 - [Email](mailto:tcyevan@gmail.com){: target="_blank"}
 - [LinkedIn](https://www.linkedin.com/in/evan-tan/){: target="_blank"}
 - [Twitter](https://twitter.com/nat_nave){: target="_blank"}
-- [GitHub](https://github.com/){: target="_blank"}
+- [GitHub](https://github.com/{{ site.accounts.github }}){: target="_blank"}
 
 </div>
