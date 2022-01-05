@@ -3,3 +3,8 @@ markdown: kramdown
 # profile links
 accounts:
   github: evan-tan
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/

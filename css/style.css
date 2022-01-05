@@ -56,3 +56,25 @@ a:hover {
     display: inline;
     margin-right: 5px;
 }
+
+.project_index {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.project_title {
+    margin-bottom: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.project_title:hover {
+    text-decoration: underline;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.project_date {
+    font-size: 12px;
+    font-weight: bold;
+}
