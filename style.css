@@ -21,8 +21,8 @@ a:hover {
     margin-bottom: 60px;
 }
 
-/* align links with landing title */
-#landing ul {
+/* remove padding and bullets of lists */
+.clean_list ul {
     padding: 0;
     list-style-type: none;
 }
