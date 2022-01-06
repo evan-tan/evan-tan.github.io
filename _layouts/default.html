@@ -9,12 +9,15 @@
     <title>{{ page.title }}</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    {% if page.katex %}
+    {% include katex.html %}
+    {% endif %}
 </head>
 
 <body>
     {% include nav.html %}
     <div class='wrap'>
-        {% if page.type == 'project' %}
+        {% if page.project %}
         <div>
             <h2>{{ page.title }}</h2>
             <p class="project_date">PUBLISHED<br>
