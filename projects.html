@@ -15,7 +15,19 @@ layout: default
     <div class="project_index">
         <a href="{{ proj.url }}" class="project_title">{{ proj.title }}</a>
         <div class="project_date">{{ proj.date | date: "%-d %B %Y" | upcase}}</div>
-        <div class="project_description">{{ proj.description }}</div>
+        <div>{{ proj.description }}</div>
+        <div class="clean_list">
+            <ul class="project_links horizontal_list">
+                {% if proj.github %}
+                <li><a href="{{ proj.github }}" target="_blank">Code</a></li>
+                {% endif %}
+
+                {% if proj.paper %}
+                {% assign proj_folder = proj.url | remove: "index/" %}
+                <li><a href="{{ proj_folder}}/{{ proj.paper }}">Paper</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
     {% endfor %}
 </div>

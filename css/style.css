@@ -27,6 +27,12 @@ a:hover {
     list-style-type: none;
 }
 
+/* turn list horizontal with small margin */
+.horizontal_list li {
+    display: inline;
+    margin-right: 5px;
+}
+
 .wrap {
     margin: 0 auto;
     max-width: 700px;
@@ -52,29 +58,32 @@ a:hover {
     list-style-type: none;
 }
 
-.nav ul li {
+/* .nav ul li {
     display: inline;
     margin-right: 5px;
-}
+} */
 
 .project_index {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
 
 .project_title {
     margin-bottom: 5px;
-    text-decoration: none;
     font-weight: bold;
     font-size: 18px;
 }
 
 .project_title:hover {
-    text-decoration: underline;
+    text-decoration: none;
     color: rgba(0, 0, 0, 0.5);
 }
 
 .project_date {
     font-size: 12px;
     font-weight: bold;
+}
+
+.project_links {
+    margin-top: 5px;
 }
