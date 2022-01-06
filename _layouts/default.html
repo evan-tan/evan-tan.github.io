@@ -14,7 +14,16 @@
 <body>
     {% include nav.html %}
     <div class='wrap'>
-        {{ content }}
+        {% if page.type == 'project' %}
+        <div>
+            <h2>{{ page.title }}</h2>
+            <p class="project_date">PUBLISHED<br>
+                {{ page.date | date: "%-d %B %Y" | upcase}}
+            </p>
+        </div>
+        <hr>
+        {% endif %}
+        <div>{{ content }}</div>
     </div>
 </body>
 
