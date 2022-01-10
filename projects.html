@@ -19,12 +19,12 @@ layout: default
         <div class="clean-ul">
             <ul class="project-links horizontal-li">
                 {% if proj.github %}
-                <li><a href="{{ proj.github }}" target="_blank">Code</a></li>
+                <li><a href="{{ proj.github }}" target="_blank">[Code]</a></li>
                 {% endif %}
 
                 {% if proj.paper %}
                 {% assign proj_folder = proj.url | remove: "index/" %}
-                <li><a href="{{ proj_folder}}/{{ proj.paper }}" target="_blank">Paper</a></li>
+                <li><a href="{{ proj_folder}}/{{ proj.paper }}" target="_blank">[Paper]</a></li>
                 {% endif %}
             </ul>
         </div>
