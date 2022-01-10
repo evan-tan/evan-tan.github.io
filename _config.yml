@@ -1,10 +1,6 @@
 markdown: kramdown
 highlighter: rouge
 
-# profile links
-accounts:
-  github: evan-tan
-
 collections:
   projects:
     output: true
@@ -12,6 +8,13 @@ collections:
 
 kramdown:
   math_engine: katex
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# sass:
+#   sass_dir: css
+#   style: compressed
 
 katex:
   js_path: "/assets/katex/" # Path used to search for katex.min.js
@@ -19,3 +22,11 @@ katex:
     # Default KaTeX rendering options. See https://github.com/Khan/KaTeX#rendering-options
     throw_error: true # throwOnError - set to false if you want rendering to output error as text rather than a build error
     error_color: "#cc0000" # errorColor
+
+title: Evan Tan
+# profile links
+accounts:
+  github: evan-tan
+  linkedin: evan-tan
+  twitter: nat_nave
+  opensea: nat_nave

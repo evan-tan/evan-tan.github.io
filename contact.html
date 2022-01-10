@@ -1,0 +1,24 @@
+---
+title: Contact
+layout: default
+---
+<div class='clean-ul'>
+    <ul>
+        <li>tcy[firstname]@gmail.com</li>
+        {% if site.accounts.linkedin %}
+        <li><a href='https://www.linkedin.com/in/{{ site.accounts.linkedin }}' target='_blank'>LinkedIn</a></li>
+        {% endif %}
+
+        {% if site.accounts.github %}
+        <li><a href='https://github.com/{{ site.accounts.github }} ' target='_blank'>GitHub</a></li>
+        {% endif %}
+
+        {% if site.accounts.twitter %}
+        <li><a href='https://twitter.com/{{ site.accounts.twitter }} ' target='_blank'>Twitter</a></li>
+        {% endif %}
+
+        {% if site.accounts.opensea %}
+        <li><a href='https://opensea.io/{{ site.accounts.opensea }} ' target='_blank'>OpenSea</a></li>
+        {% endif %}
+    </ul>
+</div>

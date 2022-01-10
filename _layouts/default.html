@@ -6,7 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ page.title }}</title>
+    {% if page.title == site.title %}
+    <title>{{ site.title }}</title>
+    {% else %}
+    <title>{{ site.title }} | {{ page.title }}</title>
+    {% endif %}
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/rouge.css">
@@ -27,8 +31,8 @@
         </div>
 
         <!-- reused code from /projects.html -->
-        <div class="clean_list">
-            <ul class="project_links horizontal_list">
+        <div class='clean-ul'>
+            <ul class="project-links horizontal-li">
                 {% if page.github %}
                 <li><a href="{{ page.github }}" target="_blank">Code</a></li>
                 {% endif %}
