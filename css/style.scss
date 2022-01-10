@@ -1,3 +1,8 @@
+---
+---
+
+/* general */
+
 html {
     font-family: -apple-system, Helvetica, arial, sans-serif;
     color: rgba(0, 0, 0, 0.8);
@@ -13,6 +18,7 @@ a {
 /* remove underline during hover */
 a:hover {
     text-decoration: none;
+    color: rgba(0, 0, 0, 0.6);
 }
 
 /* remove padding and bullets of lists */
@@ -30,13 +36,24 @@ a:hover {
 
 .wrap {
     margin: 0 auto;
+    min-width: 300px;
     max-width: 700px;
 }
 
+// nav bar
+
+#author-name {
+    font-size: 30px;
+    color: #272727;
+    display: inline-block;
+}
+
+#nav-links a:hover {
+    font-weight: bold;
+}
+
 .nav {
-    margin-top: 15px;
-    margin-bottom: 0px;
-    font-size: 12px;
+    padding: 50px 0 50px 0;
 }
 
 .nav a {
@@ -44,12 +61,33 @@ a:hover {
     text-decoration: none;
 }
 
-.nav a:hover {
-    font-weight: bold;
+.nav-ul {
+    display: inline-block;
+    margin: 0;
+    margin-left: 20px;
+}
+
+.nav-li {
+    list-style-type: none;
+    margin: 0 5px 0 10px;
+}
+
+.alignable {
+    display: inline-block;
+}
+
+.pull-left {
+    @extend .alignable;
+    float: left;
+}
+
+.pull-right {
+    @extend .alignable;
+    float: right;
 }
 
 .project-index {
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
@@ -57,11 +95,6 @@ a:hover {
     margin-bottom: 5px;
     font-weight: bold;
     font-size: 18px;
-}
-
-.project-title:hover {
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.5);
 }
 
 .project-date {
