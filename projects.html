@@ -12,15 +12,16 @@ layout: default
 {% assign ordered_projects = site.projects | sort: order %}
 <div class="wrap">
     {% for proj in ordered_projects %}
-    <div class="project_index">
-        <a href="{{ proj.url }}" class="project_title">{{ proj.title }}</a>
-        <div class="project_date">{{ proj.date | date: "%-d %B %Y" | upcase}}</div>
+    <div class="project-index">
+        <a href="{{ proj.url }}" class="project-title">{{ proj.title }}</a>
+        <div class="project-date">{{ proj.date | date: "%-d %B %Y" | upcase}}</div>
         <div>{{ proj.description }}</div>
-        <div class="clean_list">
-            <ul class="project_links horizontal_list">
+        <div class="clean-ul">
+            <ul class="project-links horizontal-li">
                 {% if proj.github %}
                 <li><a href="{{ proj.github }}" target="_blank">Code</a></li>
                 {% endif %}
+
                 {% if proj.paper %}
                 {% assign proj_folder = proj.url | remove: "index/" %}
                 <li><a href="{{ proj_folder}}/{{ proj.paper }}" target="_blank">Paper</a></li>
