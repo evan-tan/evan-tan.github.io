@@ -12,9 +12,9 @@ kramdown:
     block:
       line_numbers: true
 
-# sass:
-#   sass_dir: css
-#   style: compressed
+sass:
+  sass_dir: /css
+  style: compressed
 
 katex:
   js_path: "/assets/katex/" # Path used to search for katex.min.js
