@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<body>
+    {% include katex.html %}
+    <div>
+        <h2>{{ page.title }}</h2>
+        <p class="project-date">PUBLISHED<br>
+            {{ page.date | date: "%-d %B %Y" | upcase}}
+        </p>
+    </div>
+    <div class='clean-ul'>
+        <ul class="project-links horizontal-li">
+            {% if page.github %}
+            <li><a href="{{ page.github }}" target="_blank">[Code]</a></li>
+            {% endif %}
+
+            {% if page.paper %}
+            {% assign proj_url = page.url | remove: "/index/" %}
+            <li><a href="{{ proj_url}}/{{ page.paper }}" target="_blank">[Paper]</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <hr>
+    <div>
+        {{ content }}
+    </div>
+</body>
+
+
