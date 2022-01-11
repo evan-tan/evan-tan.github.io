@@ -105,3 +105,17 @@ a:hover {
 .project-links {
     margin-top: 5px;
 }
+
+.bibliography {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 12px;
+}
+
+.table-bordered {
+    border-collapse: collapse;
+    text-align: center;
+
+> table, td, th {
+    border: 1px solid black;
+    }
+}
