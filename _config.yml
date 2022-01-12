@@ -4,7 +4,7 @@ highlighter: rouge
 collections:
   projects:
     output: true
-    permalink: /projects/:path/
+    permalink: /:collection/:path/
 
 kramdown:
   math_engine: katex
