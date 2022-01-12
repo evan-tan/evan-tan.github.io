@@ -1,4 +1,4 @@
-markdown: kramdown
+markdown: GFM
 highlighter: rouge
 
 collections:
@@ -6,7 +6,7 @@ collections:
     output: true
     permalink: /:collection/:path/
 
-kramdown:
+GFM:
   math_engine: katex
   syntax_highlighter_opts:
     block:
