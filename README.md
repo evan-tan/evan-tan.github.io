@@ -22,3 +22,6 @@ rougify style github > ./path/style.css
 ```
 # Credits
 Heavily inspired by [Gregory Gundersen's blog](https://gregorygundersen.com/) which focuses on simplicity and technical writing instead of style.
+
+# TODO
+- enable jekyll-scholar for bibliography

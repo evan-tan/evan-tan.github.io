@@ -108,7 +108,7 @@ However, given that queue length, lane density and thus urgency were in the rang
 ## Neural Network Architecture
 With the newly learned knowledge of Recurrent Neural Networks (RNNs) (especially the new Gated Recurrent Unit (GRU)) and Long Short Term Memory (LSTM) networks, I tried to use these initially but found that it was difficult to heavily customize these policies with [Stable Baselines 3](https://github.com/DLR-RM/stable-baselines3){: target="_blank"} and [RLlib](https://docs.ray.io/en/master/rllib/index.html){: target="_blank"}.
 
-I ended up using an MLP architecture with Shared inputs below, with the critic network having 4 times larger width than the actor network, as well as `Tanh` activations as advised by the Google Brain Team {% cite andrychowicz2020matters %}.
+I ended up using an MLP architecture with Shared inputs below, with the critic network having 4 times larger width than the actor network, as well as `Tanh` activations as advised by the Google Brain Team.
 
 ```
              obs(37)
