@@ -110,7 +110,7 @@ With the newly learned knowledge of Recurrent Neural Networks (RNNs) (especially
 
 I ended up using an MLP architecture with Shared inputs below, with the critic network having 4 times larger width than the actor network, as well as `Tanh` activations as advised by the Google Brain Team.
 
-```
+```plain
              obs(37)
              |
              fc (37,256)
