@@ -1,33 +1,63 @@
----
-title: Projects
-layout: default
----
-<!-- Use the following 2 lines to sort by dates -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <title>Evan Tan | Projects</title>
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/rouge.css">
+</head>
+
+<body>
+    <div class='wrap'>
+        <div class='nav wrap'>
+    <a id='author-name' class='alignable pull-left' href=''>Evan Tan</a>
+    <ul id='nav-links' class='alignable pull-right nav-ul'>
+        <li class='alignable pull-left nav-li'><a href='/projects'>Projects</a></li>
+        <li class='alignable pull-left nav-li'><a href='/contact'>Contact</a></li>
+        <li class='alignable pull-left nav-li'><a href="https://github.com/evan-tan"
+                target="_blank">Code</a></li>
+    </ul>
+</div>
+
+<!-- prevent design from breaking -->
+<div style='clear: both'></div>
+<hr class="wrap">
+        <div><!-- Use the following 2 lines to sort by dates -->
 <!--
-{% assign ordered_projects = site.projects | sort: "date" %}
-{% for proj in ordered_projects reversed%}
-{% endfor %} <- properly position this
+
+ <- properly position this
 -->
 
-{% assign ordered_projects = site.projects | sort: order %}
+
 <div class="wrap">
-    {% for proj in ordered_projects %}
+    
     <div class="project-index">
-        <a href="{{ proj.url }}" class="project-title">{{ proj.title }}</a>
-        <div class="project-date">{{ proj.date | date: "%-d %B %Y" | upcase}}</div>
-        <div>{{ proj.description }}</div>
+        <a href="/projects/deep_rl_intelligent_traffic_management/index/" class="project-title">Deep Reinforcement Learning for Intelligent Traffic Management</a>
+        <div class="project-date">28 OCTOBER 2021</div>
+        <div>Exploring the effect of different reward functions on the performance of trained deep RL agents in terms of cumulative waiting time and average speed through traffic networks in simulation.</div>
         <div class="clean-ul">
             <ul class="project-links horizontal-li">
-                {% if proj.github %}
-                <li><a href="{{ proj.github }}" target="_blank">[Code]</a></li>
-                {% endif %}
+                
+                <li><a href="https://github.com/evan-tan/sumo-rl" target="_blank">[Code]</a></li>
+                
 
-                {% if proj.paper %}
-                {% assign proj_folder = proj.url | remove: "index/" %}
-                <li><a href="{{ proj_folder}}/{{ proj.paper }}" target="_blank">[Paper]</a></li>
-                {% endif %}
+                
+                
+                <li><a href="/projects/deep_rl_intelligent_traffic_management//deep_rl_intelligent_traffic_mgmt.pdf" target="_blank">[Paper]</a></li>
+                
             </ul>
         </div>
     </div>
-    {% endfor %}
-</div>
+    
+</div></div>
+    </div>
+</body>
+
+</html>

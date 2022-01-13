@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <title>Evan Tan | Deep Reinforcement Learning for Intelligent Traffic Management</title>
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/rouge.css">
+</head>
+
+<body>
+    <div class='wrap'>
+        <div class='nav wrap'>
+    <a id='author-name' class='alignable pull-left' href=''>Evan Tan</a>
+    <ul id='nav-links' class='alignable pull-right nav-ul'>
+        <li class='alignable pull-left nav-li'><a href='/projects'>Projects</a></li>
+        <li class='alignable pull-left nav-li'><a href='/contact'>Contact</a></li>
+        <li class='alignable pull-left nav-li'><a href="https://github.com/evan-tan"
+                target="_blank">Code</a></li>
+    </ul>
+</div>
+
+<!-- prevent design from breaking -->
+<div style='clear: both'></div>
+<hr class="wrap">
+        <div><body>
+    <!--KaTeX-->
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+</link>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="/assets/katex/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="/assets/katex/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [
+
+{left: '$$', right: '$$', display: true},
+{left: '$', right: '$', display: false},
+{left: '\\(', right: '\\)', display: false},
+{left: '\\begin{equation}', right: '\\end{equation}', display: true},
+{left: '\\begin{align}', right: '\\end{align}', display: true},
+{left: '\\begin{alignat}', right: '\\end{alignat}', display: true},
+{left: '\\begin{gather}', right: '\\end{gather}', display: true},
+{left: '\\begin{CD}', right: '\\end{CD}', display: true},
+{left: '\\[', right: '\\]', display: true}
+
+]});"></script>
+    <div>
+        <h2>Deep Reinforcement Learning for Intelligent Traffic Management</h2>
+        <p class="project-date">PUBLISHED<br>
+            28 OCTOBER 2021
+        </p>
+    </div>
+    <div class='clean-ul'>
+        <ul class="project-links horizontal-li">
+            
+            <li><a href="https://github.com/evan-tan/sumo-rl" target="_blank">[Code]</a></li>
+            
+
+            
+            
+            <li><a href="/projects/deep_rl_intelligent_traffic_management/deep_rl_intelligent_traffic_mgmt.pdf" target="_blank">[Paper]</a></li>
+            
+        </ul>
+    </div>
+    <hr>
+    <div>
+        <h2 id="introduction">Introduction</h2>
+<p>Given free reign to do a machine learning project in <a href="https://handbook.monash.edu/2021/units/ECE4179" target="_blank">ECE4179</a> I grouped up with my old friend Chris and Kai who were both from Monash Motorsport. The unit taught at university was heavily based on machine learning for computer vision applications i.e. Convolutional Neural Networks (CNNs) and it was clear that doing vision based projects would not merit high marks, so we decided to investigate the field of <strong>deep reinforcement learning</strong>.</p>
+
+<p>At first we thought of using reinforcement learning to train a bot for crypto trading given that there was heaps of volatility and thus potential gains, inspired by <a href="https://towardsdatascience.com/deep-reinforcement-learning-for-automated-stock-trading-f1dad0126a02" target="_blank">Bruce Yang’s project</a>. However, we were strongly advised against it as other students had previously tried to predict future stock prices and were unsuccessful. After considering voice cloning, autonomous driving agents in Grand Theft Auto, we decided upon <strong>intelligent traffic management</strong>.</p>
+
+<hr />
+
+<h2 id="simulator">Simulator</h2>
+<p>When researching traffic simulators, <a href="https://github.com/eclipse/sumo" target="_blank">Simulation of Urban MObility (SUMO)</a> was <em>by far the most popular</em> for existing work. We also stumbled upon the <a href="" target="_blank">CityFlow</a> simulator, but decided to stick with SUMO even though CityFlow was clearly built with develoeprs in mind. Additionally, we had stumbled upon Lucas Alegre’s <a href="https://github.com/LucasAlegre/sumo-rl" target="_blank">SUMO-RL</a> repo that had already built interfaces and simple reward functions that allowed us to focus on applying our knowledge of neural network architectures and shaping reward functions.</p>
+
+<hr />
+
+<h2 id="reward-function">Reward Function</h2>
+<h3 id="default-reward-function">Default Reward Function</h3>
+<p>The default reward function in SUMO-RL is a potential-based reward function that calculates the <strong>change in waiting time</strong> of all cars between adjacent time steps.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="k">class</span> <span class="nc">TrafficSignal</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">...):</span>
+        <span class="p">...</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_max_capacity</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># number of cars per lane
+</span>        <span class="p">...</span>
+
+    <span class="k">def</span> <span class="nf">_waiting_time_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wait_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_waiting_time_per_lane</span><span class="p">()</span>
+        <span class="n">ts_wait</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="p">.</span><span class="n">_max_capacity</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">last_measure</span> <span class="o">-</span> <span class="n">ts_wait</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">last_measure</span> <span class="o">=</span> <span class="n">ts_wait</span>
+        <span class="k">return</span> <span class="n">reward</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><munderover><mo>∑</mo><mrow><mi>c</mi><mo>=</mo><mn>1</mn></mrow><mi>C</mi></munderover><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><msub><mi>w</mi><mi>t</mi></msub><mo>−</mo><msub><mi>w</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mo separator="true">,</mo><mtext>where L is all lanes, and C is all cars in a lane</mtext></mrow><annotation encoding="application/x-tex">R(s_{t},a_{t})=\sum_{l=1}^{L}\sum_{c=1}^{C}\big(w_{t}-w_{t-1}\big), \text{where L is all lanes, and C is all cars in a lane}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.1304490000000005em;vertical-align:-1.302113em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.20001em;vertical-align:-0.35001em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="delimsizing size1">)</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord">where L is all lanes, and C is all cars in a lane</span></span></span></span></span></span>
+
+<p>However, this reward function is <strong>flawed</strong>. If the RL agent manages to minimize waiting time, the reward at the next time step may be positive and extremely small in magnitude which is counter-intuitive because keeping cumulative waiting time low means a reduction in congestion and the reward should be high and positive. This worked poorly as the waiting times were noisy as well and led to the first iteration of the reward function using <strong>Simple Moving Averages (SMA)</strong>.</p>
+
+<h3 id="simple-moving-average-reward">Simple Moving Average Reward</h3>
+<p>In this iteration, the moving averages of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn></mrow><annotation encoding="application/x-tex">20</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">20</span></span></span></span> time steps and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>200</mn></mrow><annotation encoding="application/x-tex">200</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">200</span></span></span></span> time steps were computed. Considering waiting time, whenever the short-term SMA becomes lower/higher than the long-term SMA the agent is awarded positive/negative rewards for performing better or worse than the long term average respectively. However, there may be initialization problems when the queues are not yet at max capacity. This reward function made almost no difference in the performance of the RL agent and did not help it to learn. I’ve also noticed that there’s a bug in which the accumulated waiting time is divided by the maximum lane capacity twice, since <code class="highlighter-rouge">num_vehicles</code> is also <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn></mrow><annotation encoding="application/x-tex">100</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">100</span></span></span></span>, oops.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">deque</span>
+<span class="p">...</span>
+<span class="k">class</span> <span class="nc">TrafficSignal</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">...):</span>
+        <span class="p">...</span>
+        <span class="n">num_steps</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_wait_x</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">num_steps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_wait_10x</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="n">num_steps</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="p">...</span>
+
+    <span class="k">def</span> <span class="nf">_compute_waiting_MA_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># avg waiting time running total
+</span>        <span class="n">wait_time</span><span class="p">,</span> <span class="n">num_vehicles</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_waiting_time_per_lane</span><span class="p">()</span>
+        <span class="n">acc_waiting_time</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_vehicles</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_wait_x</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc_waiting_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_wait_10x</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc_waiting_time</span><span class="p">)</span>
+        <span class="c1"># negative sign because a higher waiting time is worse
+</span>        <span class="n">wait_reward</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">_wait_x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">_wait_10x</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">wait_reward</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="pressure-reward">Pressure Reward</h3>
+
+<h3 id="shaped-reward-urgency--throughput">Shaped Reward: Urgency &amp; Throughput</h3>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><munderover><mo>∑</mo><mrow><mi>c</mi><mo>=</mo><mn>1</mn></mrow><mi>C</mi></munderover><msub><mi>U</mi><mi>l</mi></msub><mo>⊙</mo><msub><mi>O</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">R(s_{t},a_{t})=\sum_{l=1}^{L}\sum_{c=1}^{C}U_{l}\odot O_{l}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.1304490000000005em;vertical-align:-1.302113em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>U</mi><mi>l</mi></msub><mo>=</mo><mi>Q</mi><mi>u</mi><mi>e</mi><mi>u</mi><mi>e</mi><mi>L</mi><mi>e</mi><mi>n</mi><mi>g</mi><mi>t</mi><mi>h</mi><mo>⊙</mo><mi>L</mi><mi>a</mi><mi>n</mi><mi>e</mi><mi>D</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">U_{l} = Queue Length \odot Lane Density</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span><span class="mord mathnormal">L</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">t</span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊙</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">an</span><span class="mord mathnormal">eDe</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>O</mi><mi>l</mi></msub><mo>=</mo><mn>2</mn><mo fence="false" stretchy="true" minsize="1.8em" maxsize="1.8em">(</mo><mfrac><mover accent="true"><msub><mi>V</mi><mrow><mi>c</mi><mi>a</mi><mi>r</mi><mi>s</mi></mrow></msub><mo stretchy="true">‾</mo></mover><msub><mi>V</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mfrac><mo>−</mo><mn>0.5</mn><mo fence="false" stretchy="true" minsize="1.8em" maxsize="1.8em">)</mo><mo separator="true">,</mo><mtext>where </mtext><msub><mi>V</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>=</mo><mn>13.89</mn><mi>m</mi><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">O_{l}=2\Big(\frac{\overline{V_{cars}}}{V_{max}}-0.5\Big), \text{where } V_{max} = 13.89 m/s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.39633em;vertical-align:-0.8360000000000001em;"></span><span class="mord">2</span><span class="mord"><span class="delimsizing size2">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.56033em;"><span style="top:-2.3139999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8833300000000001em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">rs</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.80333em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8360000000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.80002em;vertical-align:-0.65002em;"></span><span class="mord">0.5</span><span class="mord"><span class="delimsizing size2">)</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord">where </span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">13.89</span><span class="mord mathnormal">m</span><span class="mord">/</span><span class="mord mathnormal">s</span></span></span></span></span>
+
+<p>The final reward function draws inspiration from all of the previous reward functions to achieve the <strong>best performance</strong>. Considering all lanes, where every lane has varying number of cars, average velocity, with a mix of stationary and moving cars, <em>how do we determine the true load of individual lanes on the traffic network</em>? Using <strong>Urgency</strong>, <strong><em>U</em></strong> which is the product of normalized queue length and normalized lane density of all cars in a lane, where only cars that are stopped are considered to be in the queue. Consider a lane with high lane density, if all cars are constantly moving but not stopping, waiting time would be low even though the traffic network is saturated. Thus, the urgency metric combines both queue length and lane density in order to better represent the number of cars that need to be <strong><em>“flushed”</em></strong> from any lane.</p>
+
+<p>To maximize the output of the traffic network, the <strong>throughput</strong>, <strong><em>O</em></strong> metric was created, where the average speed of all cars in a lane was divided by the speed limit (set to 13.89m/s) in order to measure the flow of cars throughout that specific lane. By combining both <strong>urgency and throughput</strong> the impact of every lane on the traffic network is better represented.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="p">...</span>
+<span class="k">def</span> <span class="nf">_compute_urgency_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="s">"""Compute urgency across all lanes"""</span>
+    <span class="c1"># urgency metric
+</span>    <span class="n">max_speed</span> <span class="o">=</span> <span class="mf">13.89</span> <span class="c1"># m/s
+</span>    <span class="n">queue</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">get_lanes_queue</span><span class="p">())</span> <span class="c1"># in [0,1]
+</span>    <span class="n">density</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">get_lanes_density</span><span class="p">())</span> <span class="c1"># in [0,1]
+</span>    <span class="c1"># elem wise multiplication
+</span>    <span class="n">urgency</span> <span class="o">=</span> <span class="n">queue</span> <span class="o">*</span> <span class="n">density</span>
+    <span class="c1"># range [-0.5, 0.5] -&gt; [-1, 1]
+</span>    <span class="n">avg_speed</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">get_mean_speed</span><span class="p">())</span>
+    <span class="n">throughput</span> <span class="o">=</span> <span class="p">(</span><span class="n">avg_speed</span> <span class="o">/</span> <span class="n">max_speed</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">urgency</span> <span class="o">*</span> <span class="n">throughput</span><span class="p">).</span><span class="nb">sum</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="numerical-stability">Numerical Stability</h4>
+<p>However, given that queue length, lane density and thus urgency were in the range <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0, 1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> and throughput is also in the range <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0, 1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span>, the product would also be in <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0, 1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span>, thus the agent would never receive negative rewards. To scale the reward appropriately, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">-0.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">0.5</span></span></span></span> was added to throughput and this result was multiplied by a factor of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span>, changing the range from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0, 1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mo>−</mo><mn>0.5</mn><mo separator="true">,</mo><mn>0.5</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[-0.5, 0.5]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">−</span><span class="mord">0.5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0.5</span><span class="mclose">]</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[-1, 1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">−</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> to allow both negative and positive reward feedback.</p>
+
+<hr />
+
+<h2 id="neural-network-architecture">Neural Network Architecture</h2>
+<p>With the newly learned knowledge of Recurrent Neural Networks (RNNs) (especially the new Gated Recurrent Unit (GRU)) and Long Short Term Memory (LSTM) networks, I tried to use these initially but found that it was difficult to heavily customize these policies with <a href="https://github.com/DLR-RM/stable-baselines3" target="_blank">Stable Baselines 3</a> and <a href="https://docs.ray.io/en/master/rllib/index.html" target="_blank">RLlib</a>.</p>
+
+<p>I ended up using an MLP architecture with Shared inputs below, with the critic network having 4 times larger width than the actor network, as well as <code class="highlighter-rouge">Tanh</code> activations as advised by the Google Brain Team.</p>
+
+<pre><code class="language-plain">             obs(37)
+             |
+             fc (37,256)
+            /           \
+           /             \
+          /               \
+        fc (256,256)      fc (64,64)
+        |                 |
+        fc (256,value)    fc (64, action)
+</code></pre>
+
+<h2 id="results">Results</h2>
+
+<table class="table-bordered">
+  <thead>
+    <tr>
+      <th>Controller</th>
+      <th>Waiting Time(s)</th>
+      <th>Average Speed(m/s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fixed Timer</td>
+      <td>10771.36</td>
+      <td>3.91</td>
+    </tr>
+    <tr>
+      <td>  RL Agent (Waiting Time Reward)  </td>
+      <td>400.66</td>
+      <td>8.88</td>
+    </tr>
+    <tr>
+      <td>RL Agent (Urgency Reward)</td>
+      <td>211.62</td>
+      <td>9.78</td>
+    </tr>
+  </tbody>
+</table>
+
+    </div>
+</body></div>
+    </div>
+</body>
+
+</html>
