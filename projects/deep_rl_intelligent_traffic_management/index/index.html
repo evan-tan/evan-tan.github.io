@@ -211,7 +211,7 @@
 <h2 id="neural-network-architecture">Neural Network Architecture</h2>
 <p>With the newly learned knowledge of Recurrent Neural Networks (RNNs) (especially the new Gated Recurrent Unit (GRU)) and Long Short Term Memory (LSTM) networks, I tried to use these initially but found that it was difficult to heavily customize these policies with <a href="https://github.com/DLR-RM/stable-baselines3" target="_blank">Stable Baselines 3</a> and <a href="https://docs.ray.io/en/master/rllib/index.html" target="_blank">RLlib</a>.</p>
 
-<p>I ended up using an MLP architecture with Shared inputs below, with the critic network having 4 times larger width than the actor network, as well as <code class="highlighter-rouge">Tanh</code> activations as advised by the Google Brain Team.</p>
+<p>I ended up using an MLP architecture with Shared inputs below, with the critic network having 4 times larger width than the actor network, as well as <code class="highlighter-rouge">Tanh</code> activations as advised by the Google Brain Team <a class="citation" href="#andrychowicz2020matters">(Andrychowicz et al., 2020)</a>.</p>
 
 <pre><code class="language-plain">             obs(37)
              |
@@ -253,6 +253,10 @@
   </tbody>
 </table>
 
+    </div>
+    <hr>
+    <div>
+        <ol class="bibliography"><li><span id="andrychowicz2020matters">Andrychowicz, M., Raichuk, A., Stańczyk, P., Orsini, M., Girgin, S., Marinier, R., Hussenot, L., Geist, M., Pietquin, O., Michalski, M., Gelly, S., &amp; Bachem, O. (2020). <i>What Matters In On-Policy Reinforcement Learning? A Large-Scale Empirical Study</i>.</span></li></ol>
     </div>
 </body></div>
     </div>
