@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <title>Evan Tan | How to publish images to Docker Hub</title>
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/rouge.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="nav wrap">
+    <a id="author-name" class="alignable pull-left" href="/">Evan Tan</a>
+    <ul id="nav-links" class="alignable pull-right nav-ul">
+        <li class="alignable pull-left nav-li"><a href="/projects">Projects</a></li>
+        <li class="alignable pull-left nav-li"><a href="/blog">Blog</a></li>
+        <li class="alignable pull-left nav-li"><a href="/contact">Contact</a></li>
+        <li class="alignable pull-left nav-li"><a href="https://github.com/evan-tan" target="_blank" rel="noopener noreferrer">Code</a></li>
+    </ul>
+</div>
+
+<!-- prevent design from breaking -->
+<div style="clear: both"></div>
+<hr class="wrap">
+        <div>
+    <!--KaTeX-->
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="/assets/katex/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="/assets/katex/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [
+
+{left: '$$', right: '$$', display: true},
+{left: '$', right: '$', display: false},
+{left: '\\(', right: '\\)', display: false},
+{left: '\\begin{equation}', right: '\\end{equation}', display: true},
+{left: '\\begin{align}', right: '\\end{align}', display: true},
+{left: '\\begin{alignat}', right: '\\end{alignat}', display: true},
+{left: '\\begin{gather}', right: '\\end{gather}', display: true},
+{left: '\\begin{CD}', right: '\\end{CD}', display: true},
+{left: '\\[', right: '\\]', display: true}
+
+]});"></script>
+    <div>
+        <p class="page-title">How to publish images to Docker Hub</p>
+        <p class="project-date">PUBLISHED<br>
+            13 JANUARY 2022
+        </p>
+    </div>
+    <div class="clean-ul">
+        <ul class="tags project-links">
+            [
+            <li>docker</li>
+            ]
+        </ul>
+    </div>
+    <hr>
+    <div>
+        <ul>
+<li>
+<a href="#getting-the-docker-image">Getting the docker image</a><ul>
+<li><a href="#method-1-using-dockerfile">Method 1: using Dockerfile</a></li>
+<li><a href="#method-2-pull-docker-image">Method 2: pull docker image</a></li>
+</ul>
+</li>
+<li><a href="#run-the-docker-image--run-configurations">Run the docker image &amp; run configurations</a></li>
+<li><a href="#grab-the-container-id">Grab the container ID</a></li>
+<li><a href="#run-docker-commit">Run docker commit</a></li>
+<li><a href="#run-docker-push">Run docker push</a></li>
+</ul>
+    </div>
+    <hr>
+    <div>
+        <h1 id="getting-the-docker-image">Getting the docker image</h1>
+<h2 id="method-1-using-dockerfile">Method 1: using Dockerfile</h2>
+<p>Create a file named <code class="highlighter-rouge">Dockerfile</code> and write the contents below</p>
+<div class="language-Dockerfile highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="k">FROM</span><span class="s"> jekyll/builder:3.8</span>
+<span class="k">RUN </span>apk add <span class="nt">--update</span> <span class="nt">--no-cache</span> nodejs npm
+<span class="k">RUN </span>gem <span class="nb">install </span>kramdown-math-katex bundler
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<p>Then build the docker image from Dockerfile using <code class="highlighter-rouge">docker build . -t image_name:tag_name</code>, where the tag is <em>optional</em></p>
+
+<h2 id="method-2-pull-docker-image">Method 2: pull docker image</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="c"># format: docker pull image_name:tag_name</span>
+docker pull jekyll/builder:3.8
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h1 id="run-the-docker-image--run-configurations">Run the docker image &amp; run configurations</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre>docker run <span class="nt">--rm</span> <span class="nt">-it</span> jekyll/builder:3.8 bash
+<span class="nb">mkdir </span>test-directory/
+<span class="nb">exit</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<p><strong>NOTE:</strong></p>
+<ul>
+  <li>
+<code class="highlighter-rouge">docker run ... -i image_name:tag_name bash -c "command_name"</code> to execute commands through the container</li>
+  <li>use <code class="highlighter-rouge">--rm</code> for automatic clean up of containers upon exiting the container</li>
+</ul>
+
+<h1 id="grab-the-container-id">Grab the container ID</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td>
+<td class="rouge-code"><pre>docker ps <span class="nt">-a</span>
+
+<span class="c"># example output</span>
+CONTAINER ID   IMAGE            COMMAND                  CREATED        ...
+d96a67fbc97f   jekyll-builder   <span class="s2">"/usr/jekyll/bin/ent…"</span>   21 hours ago   ...
+ba05b0a4b940   b5dd64e479c8     <span class="s2">"/usr/jekyll/bin/ent…"</span>   22 hours ago   ...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<p>where you will see a 12 character string under <em>CONTAINER ID</em></p>
+
+<p><strong>Before proceeding</strong>, ensure that you are logged into docker hub by running <code class="highlighter-rouge">docker login</code></p>
+
+<h1 id="run-docker-commit">Run docker commit</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre>docker commit container_id dockerhub_username/repository:tag_name
+<span class="c"># for example</span>
+docker commit d96a67fbc97f evantancy/test-repo:latest
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h1 id="run-docker-push">Run docker push</h1>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>docker push evantancy/test-repo:latest
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Now head on over to <a href="https://hub.docker.com/" target="_blank" rel="noopener noreferrer">Docker Hub</a> and your custom image is there! I’ve managed to find a great video on this <a href="https://www.youtube.com/watch?v=fdQ7MmQNTa0" target="_blank" rel="noopener noreferrer">here.</a></p>
+
+    </div>
+    <hr>
+    
+</div>
+</div></body></div>
+    </div>
+</body>
+
+</html>
