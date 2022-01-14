@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <title>Evan Tan | Using Jekyll Scholar with Github Pages</title>
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/rouge.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="nav wrap">
+    <a id="author-name" class="alignable pull-left" href="/">Evan Tan</a>
+    <ul id="nav-links" class="alignable pull-right nav-ul">
+        <li class="alignable pull-left nav-li"><a href="/projects">Projects</a></li>
+        <li class="alignable pull-left nav-li"><a href="/blog">Blog</a></li>
+        <li class="alignable pull-left nav-li"><a href="/contact">Contact</a></li>
+        <li class="alignable pull-left nav-li"><a href="https://github.com/evan-tan" target="_blank" rel="noopener noreferrer">Code</a></li>
+    </ul>
+</div>
+
+<!-- prevent design from breaking -->
+<div style="clear: both"></div>
+<hr class="wrap">
+        <div>
+    <!--KaTeX-->
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="/assets/katex/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="/assets/katex/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [
+
+{left: '$$', right: '$$', display: true},
+{left: '$', right: '$', display: false},
+{left: '\\(', right: '\\)', display: false},
+{left: '\\begin{equation}', right: '\\end{equation}', display: true},
+{left: '\\begin{align}', right: '\\end{align}', display: true},
+{left: '\\begin{alignat}', right: '\\end{alignat}', display: true},
+{left: '\\begin{gather}', right: '\\end{gather}', display: true},
+{left: '\\begin{CD}', right: '\\end{CD}', display: true},
+{left: '\\[', right: '\\]', display: true}
+
+]});"></script>
+    <div>
+        <p class="page-title">Using Jekyll Scholar with Github Pages</p>
+        <p class="project-date">PUBLISHED<br>
+            14 JANUARY 2022
+        </p>
+    </div>
+    <div class="clean-ul">
+        <ul class="tags project-links">
+            [
+            <li>jekyll</li>
+            
+            <li>github-pages</li>
+            ]
+        </ul>
+    </div>
+    <hr>
+    <div>
+        <ul>
+<li><a href="#docker-image">Docker image</a></li>
+<li>
+<a href="#changes-to-the-guide">Changes to the guide</a><ul>
+<li><a href="#step-build-jekyll-site">Step: Build jekyll site</a></li>
+<li><a href="#step-deploy-jekyll-site">Step: Deploy jekyll site</a></li>
+</ul>
+</li>
+<li><a href="#pros-and-cons">Pros and Cons</a></li>
+</ul>
+    </div>
+    <hr>
+    <div>
+        <p>By default, <a href="https://github.com/inukshuk/jekyll-scholar" target="_blank" rel="noopener noreferrer">Jekyll Scholar</a> isn’t supported by Github Pages based on the <a href="https://pages.github.com/versions/" target="_blank" rel="noopener noreferrer">list here.</a>. This plugin is extremely useful in generating references on your posts as it allows you to place a <code class="highlighter-rouge">references.bib</code> file inside <code class="highlighter-rouge">_bibliography/</code> in your Jekyll source code, and use liquid tags  <code class="highlighter-rouge">{% bibliography --cited %}</code>  to automatically generated used citations via the  <code class="highlighter-rouge">{% cite article_name %}</code>  tags in your post. This also allows references to be shared across posts and not have to individually rewrite references.</p>
+
+<p><a href="https://martinopilia.com/posts/2020/02/22/migration.html" target="_blank" rel="noopener noreferrer">This other blog post</a> covers everything, and the updated GitHub Action can be found <a href="https://martinopilia.com/posts/2020/02/22/migration.html" target="_blank" rel="noopener noreferrer">here</a> but I’ve personally had to make changes as I was running into errors for not following it exactly.</p>
+
+<h1 id="docker-image">Docker image</h1>
+
+<p>First you need a Docker image to build Jekyll locally and I decided not to use <a href="https://hub.docker.com/r/martinopilia/m-pilia.github.io" target="_blank" rel="noopener noreferrer">Martino’s Docker image</a> as I wanted to try creating my own. Luckily it was fairly simple. My docker image was created specifically for jekyll-katex and jekyll-scholar plugins, which is available <a href="https://github.com/evan-tan/evan-tan.github.io/blob/source/Dockerfile" target="_blank" rel="noopener noreferrer">here</a> and follow <a href="/blog/2022-01-13-how-to-publish-images-to-docker-hub">this guide</a>.</p>
+
+<h1 id="changes-to-the-guide">Changes to the guide</h1>
+
+<h2 id="step-build-jekyll-site">Step: Build jekyll site</h2>
+<p>I needed to use jekyll-katex and jekyll-scholar extensions, and so had to customize the Docker image by using my own <a href="https://github.com/evan-tan/evan-tan.github.io/blob/source/Dockerfile" target="_blank" rel="noopener noreferrer">Dockerfile</a> publishing my own on Docker Hub.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre>docker run <span class="nt">--rm</span> <span class="nt">--volume</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">:/srv/jekyll"</span> <span class="se">\</span>
+<span class="nt">--user</span> <span class="si">$(</span><span class="nb">id</span> <span class="nt">-u</span><span class="si">)</span>:<span class="si">$(</span><span class="nb">id</span> <span class="nt">-g</span><span class="si">)</span> <span class="se">\</span>
+<span class="nt">-i</span> evantancy/evan-tan.github.io:latest jekyll build
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h2 id="step-deploy-jekyll-site">Step: Deploy jekyll site</h2>
+<p>I ran into errors where the main branch couldn’t be found, so a simple <code class="highlighter-rouge">git fetch</code> solved this. There were also permission errors for the <code class="highlighter-rouge">mv</code> command, which could be solved with <code class="highlighter-rouge">sudo chown -R $USER:$USER ${{ github.workspace }}</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+<td class="rouge-code"><pre>run: |
+    ...
+    git config <span class="nt">--local</span> user.name <span class="s2">"GitHub Action"</span>
+    git fetch
+    git checkout main
+    <span class="nb">ls</span> <span class="nt">-Q</span> | <span class="nb">grep</span> <span class="nt">-v</span> _site | xargs <span class="nb">rm</span> <span class="nt">-rf</span>
+    <span class="nb">sudo chown</span> <span class="nt">-R</span> <span class="nv">$USER</span>:<span class="nv">$USER</span> <span class="k">${</span><span class="p">{ github.workspace </span><span class="k">}</span><span class="o">}</span>
+    <span class="nb">mv </span>_site/<span class="k">*</span> <span class="nb">.</span>
+    <span class="nb">rm</span> <span class="nt">-rf</span> _site
+    <span class="nb">rm</span> <span class="nt">-rf</span> .jekyll-cache
+    ...
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h1 id="pros-and-cons">Pros and Cons</h1>
+<p>It’s a lot more to manage than simply pushing changes to your remote repository and letting GitHub take care of the building etc. By letting GitHub handle the build, you don’t need to touch Docker, GitHub Actions, but are limited to a set of plugins and specific versions. However, after a somewhat tedious setup the Jekyll plugins that can be used are no longer restricted to <a href="https://pages.github.com/versions/" target="_blank" rel="noopener noreferrer">this list</a>. Personally, I have just started using <a href="https://github.com/linjer/jekyll-katex" target="_blank" rel="noopener noreferrer">jekyll-katex</a> for LaTeX, <a href="https://github.com/inukshuk/jekyll-scholar" target="_blank" rel="noopener noreferrer">jekyll-scholar</a> for easy referencing, and <a href="https://github.com/keithmifsud/jekyll-target-blank" target="_blank" rel="noopener noreferrer">jekyll-target-blank</a> for creating external links.</p>
+
+    </div>
+    <hr>
+    
+</div>
+</div></body></div>
+    </div>
+</body>
+
+</html>
