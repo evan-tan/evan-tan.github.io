@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>Evan Tan | Deep Reinforcement Learning for Intelligent Traffic Management</title>
+        
 
-    
-    <title>Evan Tan | Deep Reinforcement Learning for Intelligent Traffic Management</title>
-    
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/rouge.css" />
+    </head>
 
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/rouge.css">
-</head>
-
-<body>
-    <div class="wrap">
-        <div class="nav wrap">
+    <body>
+        <div class="wrap">
+            <div class="nav wrap">
     <a id="author-name" class="alignable pull-left" href="/">Evan Tan</a>
     <ul id="nav-links" class="alignable pull-right nav-ul">
-        <li class="alignable pull-left nav-li"><a href="/projects">Projects</a></li>
+        <li class="alignable pull-left nav-li">
+            <a href="/projects">Projects</a>
+        </li>
         <li class="alignable pull-left nav-li"><a href="/blog">Blog</a></li>
-        <li class="alignable pull-left nav-li"><a href="/contact">Contact</a></li>
-        <li class="alignable pull-left nav-li"><a href="https://github.com/evan-tan" target="_blank" rel="noopener noreferrer">Code</a></li>
+        <li class="alignable pull-left nav-li">
+            <a href="/contact">Contact</a>
+        </li>
+        <li class="alignable pull-left nav-li">
+            <a href="https://github.com/evan-tan" target="_blank" rel="noopener noreferrer">Code</a>
+        </li>
     </ul>
 </div>
 
 <!-- prevent design from breaking -->
 <div style="clear: both"></div>
 <hr class="wrap">
-        <div>
+
+            <div>
     <!--KaTeX-->
 <link rel="stylesheet" href="/assets/katex/katex.min.css">
 
@@ -51,25 +57,55 @@
 ]});"></script>
     <div>
         <p class="page-title">Deep Reinforcement Learning for Intelligent Traffic Management</p>
-        <p class="project-date">PUBLISHED<br>
+        <p class="project-date">
+            PUBLISHED<br>
             28 OCTOBER 2021
         </p>
     </div>
     <div class="clean-ul">
-        <ul class="project-links horizontal-li">
-            
-            <li><a href="https://github.com/evan-tan/sumo-rl" target="_blank" rel="noopener noreferrer">[Code]</a></li>
-            
+        <div class="alignable">
+<ul class="page-links horizontal-li">
+    
+    <li><a href="https://github.com/evan-tan/sumo-rl" target="_blank" rel="noopener noreferrer">[Code]</a></li>
+      
+    <li>
+        <a href="/projects/deep_rl_intelligent_traffic_management/deep_rl_intelligent_traffic_mgmt.pdf" target="_blank">[Paper]</a>
+    </li>
+    
+</ul>
+</div>
+        <div class="alignable pull-right">
+<ul class="tags page-links">
+    <!-- ensure outer for loop uses 'page' variable -->
+    [
+    <li><a href="/tags#machine-learning">machine-learning</a></li>
+    ]
+</ul>
 
-            
-            
-            <li><a href="/projects/deep_rl_intelligent_traffic_management/deep_rl_intelligent_traffic_mgmt.pdf" target="_blank">[Paper]</a></li>
-            
-        </ul>
+</div>
     </div>
+
+    <hr>
+    <div><ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#simulator">Simulator</a></li>
+<li>
+<a href="#reward-function">Reward Function</a><ul>
+<li><a href="#default-reward-function">Default Reward Function</a></li>
+<li><a href="#simple-moving-average-reward">Simple Moving Average Reward</a></li>
+<li><a href="#pressure-reward">Pressure Reward</a></li>
+<li>
+<a href="#shaped-reward-urgency--throughput">Shaped Reward: Urgency &amp; Throughput</a><ul><li><a href="#numerical-stability">Numerical Stability</a></li></ul>
+</li>
+</ul>
+</li>
+<li><a href="#neural-network-architecture">Neural Network Architecture</a></li>
+<li><a href="#results">Results</a></li>
+</ul></div>
+
     <hr>
     <div>
-        <h1 id="introduction">Introduction</h1>
+<h1 id="introduction">Introduction</h1>
 <p>Given free reign to do a machine learning project in <a href="https://handbook.monash.edu/2021/units/ECE4179" target="_blank" rel="noopener noreferrer">ECE4179</a> I grouped up with my old friend Chris and Kai who were both from Monash Motorsport. The unit taught at university was heavily based on machine learning for computer vision applications i.e. Convolutional Neural Networks (CNNs) and it was clear that doing vision based projects would not merit high marks, so we decided to investigate the field of <strong>deep reinforcement learning</strong>.</p>
 
 <p>At first we thought of using reinforcement learning to train a bot for crypto trading given that there was heaps of volatility and thus potential gains, inspired by <a href="https://towardsdatascience.com/deep-reinforcement-learning-for-automated-stock-trading-f1dad0126a02" target="_blank" rel="noopener noreferrer">Bruce Yang’s project</a>. However, we were strongly advised against it as other students had previously tried to predict future stock prices and were unsuccessful. After considering voice cloning, autonomous driving agents in Grand Theft Auto, we decided upon <strong>intelligent traffic management</strong>.</p>
@@ -263,8 +299,8 @@
 </table>
 
 <p>Shaped reward using urgency provides a 47.2% decrease in waiting time and 10.1% increase in average speed. Additionally, using a shallow linear model seems to work pretty well for tackling this problem.</p>
+</div>
 
-    </div>
     <hr>
     
     <div>
@@ -273,8 +309,8 @@
     </div>
     
 </div>
-</div></body></div>
-    </div>
-</body>
-
+</div></body>
+</div>
+        </div>
+    </body>
 </html>
