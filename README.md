@@ -1,4 +1,4 @@
-# evan-tan.github.io
+# evantancy.github.io
 
 To preview locally, first install bundle, ruby-dev and jekyll
 ```bash

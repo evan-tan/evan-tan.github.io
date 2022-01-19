@@ -26,7 +26,7 @@
             <a href="/contact">Contact</a>
         </li>
         <li class="alignable pull-left nav-li">
-            <a href="https://github.com/evan-tan" target="_blank" rel="noopener noreferrer">Code</a>
+            <a href="https://github.com/evantancy" target="_blank" rel="noopener noreferrer">Code</a>
         </li>
     </ul>
 </div>
@@ -94,12 +94,12 @@
 
 <h1 id="docker-image">Docker image</h1>
 
-<p>First you need a Docker image to build Jekyll locally and I decided not to use <a href="https://hub.docker.com/r/martinopilia/m-pilia.github.io" target="_blank" rel="noopener noreferrer">Martino’s Docker image</a> as I wanted to try creating my own. Luckily it was fairly simple. My docker image was created specifically for jekyll-katex and jekyll-scholar plugins, which is available <a href="https://github.com/evan-tan/evan-tan.github.io/blob/source/Dockerfile" target="_blank" rel="noopener noreferrer">here</a> and follow <a href="/blog/2022-01-13-how-to-publish-images-to-docker-hub">this guide</a>.</p>
+<p>First you need a Docker image to build Jekyll locally and I decided not to use <a href="https://hub.docker.com/r/martinopilia/m-pilia.github.io" target="_blank" rel="noopener noreferrer">Martino’s Docker image</a> as I wanted to try creating my own. Luckily it was fairly simple. My docker image was created specifically for jekyll-katex and jekyll-scholar plugins, which is available <a href="https://github.com/evantancy/evantancy.github.io/blob/source/Dockerfile" target="_blank" rel="noopener noreferrer">here</a> and follow <a href="/blog/2022-01-13-how-to-publish-images-to-docker-hub">this guide</a>.</p>
 
 <h1 id="changes-to-the-guide">Changes to the guide</h1>
 
 <h2 id="step-build-jekyll-site">Step: Build jekyll site</h2>
-<p>I needed to use jekyll-katex and jekyll-scholar extensions, and so had to customize the Docker image by using my own <a href="https://github.com/evan-tan/evan-tan.github.io/blob/source/Dockerfile" target="_blank" rel="noopener noreferrer">Dockerfile</a> publishing my own on Docker Hub.</p>
+<p>I needed to use jekyll-katex and jekyll-scholar extensions, and so had to customize the Docker image by using my own <a href="https://github.com/evantancy/evantancy.github.io/blob/source/Dockerfile" target="_blank" rel="noopener noreferrer">Dockerfile</a> publishing my own on Docker Hub.</p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
 <td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -107,7 +107,7 @@
 </pre></td>
 <td class="rouge-code"><pre>docker run <span class="nt">--rm</span> <span class="nt">--volume</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">:/srv/jekyll"</span> <span class="se">\</span>
 <span class="nt">--user</span> <span class="si">$(</span><span class="nb">id</span> <span class="nt">-u</span><span class="si">)</span>:<span class="si">$(</span><span class="nb">id</span> <span class="nt">-g</span><span class="si">)</span> <span class="se">\</span>
-<span class="nt">-i</span> evantancy/evan-tan.github.io:latest jekyll build
+<span class="nt">-i</span> evantancy/evantancy.github.io:latest jekyll build
 </pre></td>
 </tr></tbody></table></code></pre></div></div>
 
