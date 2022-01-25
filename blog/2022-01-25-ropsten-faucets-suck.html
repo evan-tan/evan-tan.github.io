@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        
+        <title>Evan Tan | Ropsten faucets suck, how to mine your own sweet rETH</title>
+        
+
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/rouge.css" />
+    </head>
+
+    <body>
+        <div class="wrap">
+            <div class="nav wrap">
+    <a id="author-name" class="alignable pull-left" href="/">Evan Tan</a>
+    <ul id="nav-links" class="alignable pull-right nav-ul">
+        <li class="alignable pull-left nav-li">
+            <a href="/projects">Projects</a>
+        </li>
+        <li class="alignable pull-left nav-li"><a href="/blog">Blog</a></li>
+        <li class="alignable pull-left nav-li">
+            <a href="/contact">Contact</a>
+        </li>
+        <li class="alignable pull-left nav-li">
+            <a href="https://github.com/evantancy" target="_blank" rel="noopener noreferrer">Code</a>
+        </li>
+    </ul>
+</div>
+
+<!-- prevent design from breaking -->
+<div style="clear: both"></div>
+<hr class="wrap">
+
+            <div>
+    <!--KaTeX-->
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="/assets/katex/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="/assets/katex/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [
+
+{left: '$$', right: '$$', display: true},
+{left: '$', right: '$', display: false},
+{left: '\\(', right: '\\)', display: false},
+{left: '\\begin{equation}', right: '\\end{equation}', display: true},
+{left: '\\begin{align}', right: '\\end{align}', display: true},
+{left: '\\begin{alignat}', right: '\\end{alignat}', display: true},
+{left: '\\begin{gather}', right: '\\end{gather}', display: true},
+{left: '\\begin{CD}', right: '\\end{CD}', display: true},
+{left: '\\[', right: '\\]', display: true}
+
+]});"></script>
+    <div>
+        <p class="page-title">Ropsten faucets suck, how to mine your own sweet rETH</p>
+        <p class="project-date">
+            PUBLISHED<br>
+            25 JANUARY 2022
+        </p>
+    </div>
+    <div class="clean-ul">
+<ul class="tags page-links">
+    <!-- ensure outer for loop uses 'page' variable -->
+    [
+    <li><a href="/tags#cryptocurrency">cryptocurrency</a></li>
+    ]
+</ul>
+
+</div>
+
+    <hr>
+    <div><ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#mine-your-own">Mine your own</a></li>
+<li>
+<a href="#installations">Installations</a><ul>
+<li><a href="#ethereum">Ethereum</a></li>
+<li><a href="#golang">golang</a></li>
+<li><a href="#nvidia-cuda-toolkit">NVIDIA CUDA Toolkit</a></li>
+<li>
+<a href="#cmake--ethminer">CMake &amp;&amp; ethminer</a><ul><li><a href="#fixing-the-cmake-error">Fixing the CMake error</a></li></ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#configuration">Configuration</a><ul>
+<li><a href="#run-geth">Run geth</a></li>
+<li>
+<a href="#enter-geth-console">Enter geth console</a><ul><li><a href="#catching-up-with-the-network">Catching up with the network</a></li></ul>
+</li>
+<li><a href="#setting-the-address">Setting the address</a></li>
+<li><a href="#start-mining">Start mining</a></li>
+<li><a href="#run-ethminer">Run ethminer</a></li>
+</ul>
+</li>
+</ul></div>
+
+    <hr>
+    <div>
+<h1 id="introduction">Introduction</h1>
+
+<p>Since I began learning Solidity with <a href="https://twitter.com/OriginsNFT" target="_blank" rel="noopener noreferrer">OriginsNFT</a>, we needed some Ropsten ETH or rETH in order to deploy smart contracts and experiment on the Ropsten network. Faucets typically give 0.1 to 1 rETH with some websites giving 10 rETH, but users are limited to receiving rETH every 24 hours to 1 week.</p>
+
+<h1 id="mine-your-own">Mine your own</h1>
+
+<p>rETH is extremely easy to mine and I did it on a laptop with an i7 CPU with a GeForce 1660 Ti, nothing as crazy as what is required for the ETH Mainnet. <a href="https://www.linkedin.com/pulse/how-mine-ropsten-testnet-ether-keir-finlow-bates/" target="_blank" rel="noopener noreferrer">This following guide</a> pretty much outlines all the steps, however there were some changes I made that made it work.
+<strong>NOTE:</strong> this guide was completed on Ubuntu 18.04, with a CUDA compatible GPU, and requires ~200GB of disk space.</p>
+
+<h1 id="installations">Installations</h1>
+
+<p>Firstly you’ll need to install some packages.</p>
+<h2 id="ethereum">Ethereum</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">sudo </span>add-apt-repository <span class="nt">-y</span> ppa:ethereum/ethereum
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nt">-y</span> <span class="nb">install </span>ethereum
+<span class="c"># verify, 1.10.15-stable at the time of writing</span>
+geth version
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h2 id="golang">golang</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td>
+<td class="rouge-code"><pre><span class="c"># or head to https://go.dev/doc/install for the latest version</span>
+wget https://go.dev/dl/go1.17.6.linux-amd64.tar.gz
+<span class="nb">tar</span> <span class="nt">-xf</span> go1.17.6.linux-amd64.tar.gz
+<span class="nb">rm</span> <span class="nt">-rf</span> /usr/local/go <span class="o">&amp;&amp;</span> <span class="nb">tar</span> <span class="nt">-C</span> /usr/local <span class="nt">-xzf</span> go1.17.6.linux-amd64.tar.gz
+<span class="c"># add directory to .bashrc, quotes here are extremely important</span>
+<span class="nb">echo</span> <span class="s1">'export PATH="$PATH:/usr/local/go/bin"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="c"># verify</span>
+go version
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h2 id="nvidia-cuda-toolkit">NVIDIA CUDA Toolkit</h2>
+<p>Head to the <a href="https://developer.nvidia.com/cuda-downloads" target="_blank" rel="noopener noreferrer">CUDA Toolkit downloads page</a> and select which version you want. Version 11.5.1 was used in this guide. Alternatively, use the <strong>cuda role</strong> in <a href="https://github.com/evantancy/ansible/blob/main/base.yml" target="_blank" rel="noopener noreferrer">my Ansible playbook</a>.</p>
+
+<h2 id="cmake--ethminer">CMake &amp;&amp; ethminer</h2>
+<p>Follow the <a href="https://apt.kitware.com/" target="_blank" rel="noopener noreferrer">steps here</a> or use the <strong>cmake role</strong> in <a href="https://github.com/evantancy/ansible/blob/main/base.yml" target="_blank" rel="noopener noreferrer">my Ansible playbook</a>, commenting out the other packages.</p>
+
+<p>For ethminer, build the binary using the following:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> git mesa-common-dev
+<span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> build-essential
+git clone https://github.com/ethereum-mining/ethminer
+<span class="nb">cd </span>ethminer/
+git submodule update <span class="nt">--init</span> <span class="nt">--recursive</span>
+<span class="nb">mkdir </span>build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build/
+cmake .. <span class="nt">-DETHASHCUDA</span><span class="o">=</span>ON <span class="nt">-DETHASHCL</span><span class="o">=</span>OFF <span class="nt">-DETHSTRATUM</span><span class="o">=</span>ON
+cmake <span class="nt">--build</span> <span class="nb">.</span>
+<span class="nb">sudo </span>make <span class="nb">install</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<h3 id="fixing-the-cmake-error">Fixing the CMake error</h3>
+<p>Inside of <code class="highlighter-rouge">~/.hunter/_Base/Download/Hunter/*/*/Unpacked/cmake/projects/Boost/hunter.cmake</code> change <code class="highlighter-rouge">https://dl.bintray.com/boostorg/release</code> to <code class="highlighter-rouge">https://boostorg.jfrog.io/artifactory/main/release</code></p>
+
+<p>Doing this the lazy way,</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="c"># jank wildcard, tested locally</span>
+<span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s#https://dl.bintray.com/boostorg/release#https://boostorg.jfrog.io/artifactory/main/release#g'</span> ~/.hunter/_Base/Download/Hunter/<span class="k">*</span>/<span class="k">*</span>/Unpacked/cmake/projects/Boost/hunter.cmake
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h1 id="configuration">Configuration</h1>
+<h2 id="run-geth">Run geth</h2>
+<p>Get the geth node up and running using the following:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre>geth <span class="nt">--ropsten</span> <span class="nt">--http</span> <span class="nt">--http</span>.api eth,net,web3,personal,miner,admin,txpool,debug <span class="nt">--http</span>.corsdomain <span class="s1">'*'</span> <span class="nt">--http</span>.addr 127.0.0.1 <span class="nt">--http</span>.port 8545 <span class="nt">--syncmode</span> <span class="s2">"full"</span>
+<span class="nv">GOROOT</span><span class="o">=</span>go
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<h2 id="enter-geth-console">Enter geth console</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre>geth attach http://ip_address:port_number
+<span class="c"># for example using the http.addr and http.port in Step 1</span>
+geth attach http://127.0.0.1:8545
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h3 id="catching-up-with-the-network">Catching up with the network</h3>
+<p>When in the console you can view your peer information through the <code class="highlighter-rouge">net</code> command, and can see whether you have caught up with the network through <code class="highlighter-rouge">eth.syncing</code> _this should be <strong>false</strong> when you are fully caught up.</p>
+
+<p>To speed up syncing, <a href="https://gist.github.com/evantancy/dd80ab5fc5c54a01eaae71e98555caf0" target="_blank" rel="noopener noreferrer">add some peers by copying the 1-liner here</a>.</p>
+
+<p>Now be patient and let it do it’s thing.</p>
+
+<h2 id="setting-the-address">Setting the address</h2>
+<p>Inside the <strong>geth console</strong>, run the following:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td>
+<td class="rouge-code"><pre><span class="c"># use your own address</span>
+miner.setEtherbase<span class="o">(</span><span class="s2">"0x92668e1E6Bbf1e7681A178FCcC144B99298bBA6a"</span><span class="o">)</span>
+<span class="c"># verify</span>
+eth.coinbase
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<h2 id="start-mining">Start mining</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td>
+<td class="rouge-code"><pre><span class="c"># use 0 CPUs to mine</span>
+miner.start<span class="o">(</span>0<span class="o">)</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h2 id="run-ethminer">Run ethminer</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>ethminer <span class="nt">-U</span> <span class="nt">-P</span> http://127.0.0.1:8545
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+<p>Aaaaaand you’re all set! Just wait for the rETH to come in and you should see something like this</p>
+
+<p><img class="wrap" src="/assets/ropsten_eth.png"></p>
+</div>
+
+    <hr>
+    
+</div>
+</div></body>
+</div>
+        </div>
+    </body>
+</html>
