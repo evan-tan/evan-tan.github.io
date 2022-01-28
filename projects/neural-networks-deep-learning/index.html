@@ -85,15 +85,22 @@
     <div><ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#pipeline">Pipeline</a></li>
+<li><a href="#perceptron-algorithm">Perceptron Algorithm</a></li>
 <li>
 <a href="#linear-models">Linear Models</a><ul>
 <li><a href="#linear-regression">Linear Regression</a></li>
 <li><a href="#logistic-regression">Logistic Regression</a></li>
-<li><a href="#modelling-space">Modelling space</a></li>
 </ul>
 </li>
-<li><a href="#learning-rate">Learning Rate</a></li>
+<li><a href="#modelling-space--feature-engineering">Modelling Space &amp; Feature Engineering</a></li>
 <li><a href="#activation-functions">Activation Functions</a></li>
+<li><a href="#model-convergence">Model Convergence</a></li>
+<li>
+<a href="#hyperparameters">Hyperparameters</a><ul>
+<li><a href="#learning-rate">Learning Rate</a></li>
+<li><a href="#learning-rate-scheduler">Learning Rate Scheduler</a></li>
+</ul>
+</li>
 <li>
 <a href="#convolutional-neural-networks-cnns">Convolutional Neural Networks (CNNs)</a><ul>
 <li><a href="#convolution-operation">Convolution Operation</a></li>
@@ -110,50 +117,96 @@
 
 <p>Let’s some things about machine learning. <strong><em>Machine learning is nothing but a combination of beautiful math and programming.</em></strong></p>
 
-<p>Why did I pour more effort into this university unit compared to my final year project (FYP)? I did this because while I had managed to <a href="https://github.com/evantancy/ece4078-team2-05" target="_blank" rel="noopener noreferrer">train and deploy models like YOLOv4 onto a robot</a>, or was <a href="https://github.com/evantancy/CrowdNav_DSRNN" target="_blank" rel="noopener noreferrer">diving deep with reward shaping for my FYP</a>, <strong>machine learning</strong> felt like a big black box that I place data and train something to output some numbers. <em>What was I training? What was the training process? What did the numbers mean?</em> I’m pretty happy I put more time into this unit and finished off strong with <a href="/projects/deep-rl-intelligent-traffic-management/index">a group project with reinforcement learning.</a>.</p>
+<p>Why did I pour more effort into this university unit compared to my final year project (FYP)? I did this because while I had managed to <a href="https://github.com/evantancy/ece4078-team2-05" target="_blank" rel="noopener noreferrer">train and deploy models like YOLOv4 onto a robot</a>, or was <a href="https://github.com/evantancy/CrowdNav_DSRNN" target="_blank" rel="noopener noreferrer">diving deep with reward shaping for my FYP</a>, <strong>machine learning</strong> felt like a big black box that I place data and train something to output some numbers. <em>What was I training? What was the training process? What did the numbers mean?</em> I’m pretty happy I put more time into this unit and finished off strong with <a href="/projects/deep-rl-intelligent-traffic-management/index">a group project with reinforcement learning.</a></p>
 
 <p>This module primarily focuses on convolutional neural networks (CNNs) which is what will be discussed in this post.</p>
 
 <h1 id="pipeline">Pipeline</h1>
 
-<p>Machine learning requires data. A lot of it. These come in the form of labelled or un-labelled data. Based on the input data, a model with randomly initialized predicts the class of the input and the loss is some difference between the true label and predicted label.</p>
+<p>Machine learning requires data. <strong>A lot of it.</strong> These come in the form of labelled or un-labelled data. Certain features are created from the data as input features for a model. At the start, the weights of the model are randomly initialized. During training, the model weights are being optimized using backpropagation and gradient descent, which provides a magnitude and direction to update the weights in a way that minimizes the <em>loss</em> i.e. the difference between a model’s prediction and the ground truth of the input data.</p>
+
+<p>The model iteratively learns the data by reducing the difference between its predictions and the true label. with randomly initialized predicts the class of the input and the loss is some difference between the true label and predicted label.</p>
+
+<h1 id="perceptron-algorithm">Perceptron Algorithm</h1>
+
+<p>…</p>
 
 <h1 id="linear-models">Linear Models</h1>
 
+<p>In the following equations, $ \hat{y} = w^{T}x_i $ refers to the <em>model’s prediction based on some input x at index i</em>.</p>
+
 <h2 id="linear-regression">Linear Regression</h2>
 
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><msup><mi>w</mi><mi>T</mi></msup><mi>x</mi></mrow><annotation encoding="application/x-tex">y=w^{T}x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8913309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">x</span></span></span></span></span>
+<p>The loss function for linear regression is as follows.</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi>S</mi><mi>E</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo separator="true">,</mo><mtext>where w = weights and b = biases</mtext></mrow><annotation encoding="application/x-tex">\mathcal{L}_{SE}=\frac{1}{m}\sum_{i=1}^{N}(\hat{y}-y_{i})^{2}, \text{where w = weights and b = biases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">SE</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.106005em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">m</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord">where w = weights and b = biases</span></span></span></span></span></span>
+
+<p>This is also known as the Least Squares Error (LSE) as it calculates the …</p>
 
 <h2 id="logistic-regression">Logistic Regression</h2>
 
-<p>y = log(1-y)</p>
+<p>The loss function for logistic regression is as follows.</p>
 
-<h2 id="modelling-space">Modelling space</h2>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mi>y</mi><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false">)</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}(\hat{y},y)=-ylog(\hat{y})-(1-y)log(1-\hat{y})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathcal">L</span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>
 
-<h1 id="learning-rate">Learning Rate</h1>
-<p>If learning rate is too high, the model may converge but overshoot beyond the point of optimality. If learning rate is too low, the model might not converge at all.</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mi>y</mi><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mi>σ</mi><mo stretchy="false">(</mo><msup><mi>w</mi><mi>T</mi></msup><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false">)</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mo stretchy="false">(</mo><msup><mi>w</mi><mi>T</mi></msup><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}(\hat{y},y)=-ylog(\sigma(w^{T}x)-(1-y)log(1-\sigma(w^{T}x))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathcal">L</span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mclose">))</span></span></span></span></span>
+
+<h1 id="modelling-space--feature-engineering">Modelling Space &amp; Feature Engineering</h1>
+
+<p>What is the purpose of activation functions or non-linear functions? Say we have the following features $ x_1, x_2 $ and weights $ \mathcal{W} = [w_1, w_2] $. By multiplying the features by the model weights, there is some linear transformation of the feature space. However, it is impossible to separate the features <strong>without any nonlinear function</strong>.</p>
+
+<figure>
+    <img class="wrap img" src="./nonlinearly-separable.png">
+    <figcaption class="caption">Data is not linearly separable</figcaption>
+</figure>
+
+<figure>
+    <img class="wrap" src="./linearly-separable.png">
+    <figcaption class="caption">Linearly separable data after transformation</figcaption>
+</figure>
 
 <h1 id="activation-functions">Activation Functions</h1>
 
+<p>Purpose …</p>
+
+<ul>
+  <li>Sigmoid</li>
+  <li>ReLU</li>
+  <li>LeakyReLU</li>
+  <li>Tanh</li>
+</ul>
+
+<h1 id="model-convergence">Model Convergence</h1>
+<p>…</p>
+
+<h1 id="hyperparameters">Hyperparameters</h1>
+
+<h2 id="learning-rate">Learning Rate</h2>
+<p>If learning rate is too high, the model may converge but overshoot beyond the point of optimality. If learning rate is too low, the model might not converge at all.</p>
+
+<h2 id="learning-rate-scheduler">Learning Rate Scheduler</h2>
+<p>OneCycleLR</p>
+
 <h1 id="convolutional-neural-networks-cnns">Convolutional Neural Networks (CNNs)</h1>
+
 <h2 id="convolution-operation">Convolution Operation</h2>
+<p>…</p>
 
 <h2 id="what-do-cnns-see">What do CNNs see?</h2>
-<p>Anyone can go onto the PyTorch tutorials, rip off the code and train a CNN, but what do convolutional layers output?</p>
+<p>Anyone can go onto the PyTorch tutorials, rip off the code and train a CNN, but what do convolutional layers output? <a class="citation" href="#zeiler2013visualizing">(Zeiler &amp; Fergus, 2013)</a>.</p>
 
 <h2 id="when-to-use-minpool-maxpool-and-avgpool">When to use MinPool, MaxPool, and AvgPool?</h2>
-
-<p>##</p>
+<p>…</p>
 
 <h1 id="recurrent-neural-networks-rnns">Recurrent Neural Networks (RNNs)</h1>
-
+<p>…</p>
 </div>
 
     <hr>
     
     <div>
         <h1>References</h1>
-        <ol class="bibliography"></ol>
+        <ol class="bibliography"><li><span id="zeiler2013visualizing">Zeiler, M. D., &amp; Fergus, R. (2013). <i>Visualizing and Understanding Convolutional Networks</i>.</span></li></ol>
     </div>
     
 </div>
