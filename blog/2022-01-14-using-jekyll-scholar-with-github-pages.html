@@ -55,27 +55,30 @@
 {left: '\\[', right: '\\]', display: true}
 
 ]});"></script>
-    <div>
-        <p class="page-title">Using Jekyll Scholar with Github Pages</p>
-        <p class="project-date">
-            PUBLISHED<br>
-            14 JANUARY 2022
-        </p>
-    </div>
-    <div class="clean-ul">
+    <div class="wrap">
+        <div>
+            <p class="page-title">Using Jekyll Scholar with Github Pages</p>
+            <p class="project-date">
+                PUBLISHED<br>
+                14 JANUARY 2022
+            </p>
+        </div>
+        <div class="clean-ul">
 <ul class="tags page-links">
     <!-- ensure outer for loop uses 'page' variable -->
-    [
+    
     <li><a href="/tags#jekyll">jekyll</a></li>
     
     <li><a href="/tags#github-pages">github-pages</a></li>
-    ]
+    
 </ul>
 
 </div>
+        <!-- prevent design from breaking -->
+        <div style="clear: both"></div>
 
-    <hr>
-    <div><ul>
+        <hr>
+        <div><ul>
 <li><a href="#docker-image">Docker image</a></li>
 <li>
 <a href="#changes-to-the-guide">Changes to the guide</a><ul>
@@ -86,8 +89,8 @@
 <li><a href="#pros-and-cons">Pros and Cons</a></li>
 </ul></div>
 
-    <hr>
-    <div>
+        <hr>
+        <div>
 <p>By default, <a href="https://github.com/inukshuk/jekyll-scholar" target="_blank" rel="noopener noreferrer">Jekyll Scholar</a> isn’t supported by Github Pages based on the <a href="https://pages.github.com/versions/" target="_blank" rel="noopener noreferrer">list here.</a>. This plugin is extremely useful in generating references on your posts as it allows you to place a <code class="highlighter-rouge">references.bib</code> file inside <code class="highlighter-rouge">_bibliography/</code> in your Jekyll source code, and use liquid tags  <code class="highlighter-rouge">{% bibliography --cited %}</code>  to automatically generated used citations via the  <code class="highlighter-rouge">{% cite article_name %}</code>  tags in your post. This also allows references to be shared across posts and not have to individually rewrite references.</p>
 
 <p><a href="https://martinopilia.com/posts/2020/02/22/migration.html" target="_blank" rel="noopener noreferrer">This other blog post</a> covers everything, and the updated GitHub Action can be found <a href="https://martinopilia.com/posts/2020/02/22/migration.html" target="_blank" rel="noopener noreferrer">here</a> but I’ve personally had to make changes as I was running into errors for not following it exactly.</p>
@@ -145,8 +148,9 @@
 <p>It’s a lot more to manage than simply pushing changes to your remote repository and letting GitHub take care of the building etc. By letting GitHub handle the build, you don’t need to touch Docker, GitHub Actions, but are limited to a set of plugins and specific versions. However, after a somewhat tedious setup the Jekyll plugins that can be used are no longer restricted to <a href="https://pages.github.com/versions/" target="_blank" rel="noopener noreferrer">this list</a>. Personally, I have just started using <a href="https://github.com/linjer/jekyll-katex" target="_blank" rel="noopener noreferrer">jekyll-katex</a> for LaTeX, <a href="https://github.com/inukshuk/jekyll-scholar" target="_blank" rel="noopener noreferrer">jekyll-scholar</a> for easy referencing, and <a href="https://github.com/keithmifsud/jekyll-target-blank" target="_blank" rel="noopener noreferrer">jekyll-target-blank</a> for creating external links.</p>
 </div>
 
-    <hr>
-    
+        <hr>
+        
+    </div>
 </div>
 </div></body>
 </div>

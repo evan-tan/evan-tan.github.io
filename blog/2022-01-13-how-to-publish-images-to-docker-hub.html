@@ -55,25 +55,28 @@
 {left: '\\[', right: '\\]', display: true}
 
 ]});"></script>
-    <div>
-        <p class="page-title">How to publish images to Docker Hub</p>
-        <p class="project-date">
-            PUBLISHED<br>
-            13 JANUARY 2022
-        </p>
-    </div>
-    <div class="clean-ul">
+    <div class="wrap">
+        <div>
+            <p class="page-title">How to publish images to Docker Hub</p>
+            <p class="project-date">
+                PUBLISHED<br>
+                13 JANUARY 2022
+            </p>
+        </div>
+        <div class="clean-ul">
 <ul class="tags page-links">
     <!-- ensure outer for loop uses 'page' variable -->
-    [
+    
     <li><a href="/tags#docker">docker</a></li>
-    ]
+    
 </ul>
 
 </div>
+        <!-- prevent design from breaking -->
+        <div style="clear: both"></div>
 
-    <hr>
-    <div><ul>
+        <hr>
+        <div><ul>
 <li>
 <a href="#getting-the-docker-image">Getting the docker image</a><ul>
 <li><a href="#method-1-using-dockerfile">Method 1: using Dockerfile</a></li>
@@ -86,8 +89,8 @@
 <li><a href="#run-docker-push">Run docker push</a></li>
 </ul></div>
 
-    <hr>
-    <div>
+        <hr>
+        <div>
 <h1 id="getting-the-docker-image">Getting the docker image</h1>
 <h2 id="method-1-using-dockerfile">Method 1: using Dockerfile</h2>
 <p>Create a file named <code class="highlighter-rouge">Dockerfile</code> and write the contents below</p>
@@ -178,8 +181,9 @@ docker commit d96a67fbc97f evantancy/test-repo:latest
 <p>Now head on over to <a href="https://hub.docker.com/" target="_blank" rel="noopener noreferrer">Docker Hub</a> and your custom image is there! I’ve managed to find a great video on this <a href="https://www.youtube.com/watch?v=fdQ7MmQNTa0" target="_blank" rel="noopener noreferrer">here.</a></p>
 </div>
 
-    <hr>
-    
+        <hr>
+        
+    </div>
 </div>
 </div></body>
 </div>

@@ -55,38 +55,41 @@
 {left: '\\[', right: '\\]', display: true}
 
 ]});"></script>
-    <div>
-        <p class="page-title">Deep Reinforcement Learning for Intelligent Traffic Management</p>
-        <p class="project-date">
-            PUBLISHED<br>
-            28 OCTOBER 2021
-        </p>
-    </div>
-    <div class="clean-ul">
-        <div class="alignable">
+    <div class="wrap">
+        <div>
+            <p class="page-title">Deep Reinforcement Learning for Intelligent Traffic Management</p>
+            <p class="project-date">
+                PUBLISHED<br>
+                28 OCTOBER 2021
+            </p>
+        </div>
+        <div class="clean-ul">
+            <div class="alignable">
 <ul class="page-links horizontal-li">
-    
-    <li>[ <a href="https://github.com/evantancy/sumo-rl" target="_blank" rel="noopener noreferrer">Code</a> ]</li>
-      
-    <li>[ <a href="/projects/deep-rl-intelligent-traffic-management/deep-rl-intelligent-traffic-mgmt.pdf" target="_blank">Paper</a> ]</li>
+       
+    <li><a href="https://github.com/evantancy/sumo-rl" target="_blank" rel="noopener noreferrer">github</a></li>
+       
+    <li><a href="/projects/deep-rl-intelligent-traffic-management/deep-rl-intelligent-traffic-mgmt.pdf">paper</a></li>
     
 </ul>
 </div>
-        <div class="alignable pull-right">
+            <div class="alignable pull-right">
 <ul class="tags page-links">
     <!-- ensure outer for loop uses 'page' variable -->
-    [
+    
     <li><a href="/tags#machine-learning">machine-learning</a></li>
     
     <li><a href="/tags#reinforcement-learning">reinforcement-learning</a></li>
-    ]
+    
 </ul>
 
 </div>
-    </div>
+        </div>
+        <!-- prevent design from breaking -->
+        <div style="clear: both"></div>
 
-    <hr>
-    <div><ul>
+        <hr>
+        <div><ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#simulator">Simulator</a></li>
 <li>
@@ -103,8 +106,8 @@
 <li><a href="#results">Results</a></li>
 </ul></div>
 
-    <hr>
-    <div>
+        <hr>
+        <div>
 <h1 id="introduction">Introduction</h1>
 <p>Given free reign to do a machine learning project in <a href="https://handbook.monash.edu/2021/units/ECE4179" target="_blank" rel="noopener noreferrer">ECE4179</a> I grouped up with my old friend Chris and Kai who were both from Monash Motorsport. The unit taught at university was heavily based on machine learning for computer vision applications i.e. Convolutional Neural Networks (CNNs) and it was clear that doing vision based projects would not merit high marks, so we decided to investigate the field of <strong>deep reinforcement learning</strong>.</p>
 
@@ -136,12 +139,14 @@
 10
 11
 12
+13
 </pre></td>
 <td class="rouge-code"><pre><span class="k">class</span> <span class="nc">TrafficSignal</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">...):</span>
         <span class="p">...</span>
-        <span class="bp">self</span><span class="p">.</span><span class="n">_max_capacity</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># number of cars per lane
-</span>        <span class="p">...</span>
+        <span class="c1"># number of cars per lane
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">_max_capacity</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="p">...</span>
 
     <span class="k">def</span> <span class="nf">_waiting_time_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">wait_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_waiting_time_per_lane</span><span class="p">()</span>
@@ -307,13 +312,14 @@
 <p>Shaped reward using urgency provides a 47.2% decrease in waiting time and 10.1% increase in average speed. Additionally, using a shallow linear model seems to work pretty well for tackling this problem.</p>
 </div>
 
-    <hr>
-    
-    <div>
-        <h1>References</h1>
-        <ol class="bibliography"><li><span id="andrychowicz2020matters">Andrychowicz, M., Raichuk, A., Stańczyk, P., Orsini, M., Girgin, S., Marinier, R., Hussenot, L., Geist, M., Pietquin, O., Michalski, M., Gelly, S., &amp; Bachem, O. (2020). <i>What Matters In On-Policy Reinforcement Learning? A Large-Scale Empirical Study</i>.</span></li></ol>
+        <hr>
+        
+        <div>
+            <h1>References</h1>
+            <ol class="bibliography"><li><span id="andrychowicz2020matters">Andrychowicz, M., Raichuk, A., Stańczyk, P., Orsini, M., Girgin, S., Marinier, R., Hussenot, L., Geist, M., Pietquin, O., Michalski, M., Gelly, S., &amp; Bachem, O. (2020). <i>What Matters In On-Policy Reinforcement Learning? A Large-Scale Empirical Study</i>.</span></li></ol>
+        </div>
+        
     </div>
-    
 </div>
 </div></body>
 </div>

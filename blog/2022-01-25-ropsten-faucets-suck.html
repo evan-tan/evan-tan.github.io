@@ -55,25 +55,28 @@
 {left: '\\[', right: '\\]', display: true}
 
 ]});"></script>
-    <div>
-        <p class="page-title">Ropsten faucets suck, how to mine your own sweet rETH</p>
-        <p class="project-date">
-            PUBLISHED<br>
-            25 JANUARY 2022
-        </p>
-    </div>
-    <div class="clean-ul">
+    <div class="wrap">
+        <div>
+            <p class="page-title">Ropsten faucets suck, how to mine your own sweet rETH</p>
+            <p class="project-date">
+                PUBLISHED<br>
+                25 JANUARY 2022
+            </p>
+        </div>
+        <div class="clean-ul">
 <ul class="tags page-links">
     <!-- ensure outer for loop uses 'page' variable -->
-    [
+    
     <li><a href="/tags#cryptocurrency">cryptocurrency</a></li>
-    ]
+    
 </ul>
 
 </div>
+        <!-- prevent design from breaking -->
+        <div style="clear: both"></div>
 
-    <hr>
-    <div><ul>
+        <hr>
+        <div><ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#mine-your-own">Mine your own</a></li>
 <li>
@@ -99,8 +102,8 @@
 </li>
 </ul></div>
 
-    <hr>
-    <div>
+        <hr>
+        <div>
 <h1 id="introduction">Introduction</h1>
 
 <p>Since I began learning Solidity with <a href="https://twitter.com/OriginsNFT" target="_blank" rel="noopener noreferrer">OriginsNFT</a>, we needed some Ropsten ETH or rETH in order to deploy smart contracts and experiment on the Ropsten network. Faucets typically give 0.1 to 1 rETH with some websites giving 10 rETH, but users are limited to receiving rETH every 24 hours to 1 week.</p>
@@ -256,11 +259,12 @@ miner.start<span class="o">(</span>0<span class="o">)</span>
 </tr></tbody></table></code></pre></div></div>
 <p>Aaaaaand you’re all set! Just wait for the rETH to come in and you should see something like this</p>
 
-<p><img class="wrap" src="/assets/ropsten_eth.png"></p>
+<p><img src="/assets/ropsten_eth.png"></p>
 </div>
 
-    <hr>
-    
+        <hr>
+        
+    </div>
 </div>
 </div></body>
 </div>

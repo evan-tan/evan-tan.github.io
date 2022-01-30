@@ -55,34 +55,37 @@
 {left: '\\[', right: '\\]', display: true}
 
 ]});"></script>
-    <div>
-        <p class="page-title">Neural Networks and Deep Learning</p>
-        <p class="project-date">
-            PUBLISHED<br>
-            28 OCTOBER 2021
-        </p>
-    </div>
-    <div class="clean-ul">
-        <div class="alignable">
+    <div class="wrap">
+        <div>
+            <p class="page-title">Neural Networks and Deep Learning</p>
+            <p class="project-date">
+                PUBLISHED<br>
+                28 OCTOBER 2021
+            </p>
+        </div>
+        <div class="clean-ul">
+            <div class="alignable">
 <ul class="page-links horizontal-li">
+       
+    <li><a href="https://github.com/evantancy/ece4179" target="_blank" rel="noopener noreferrer">github</a></li>
     
-    <li>[ <a href="https://github.com/evantancy/ece4179" target="_blank" rel="noopener noreferrer">Code</a> ]</li>
-     
 </ul>
 </div>
-        <div class="alignable pull-right">
+            <div class="alignable pull-right">
 <ul class="tags page-links">
     <!-- ensure outer for loop uses 'page' variable -->
-    [
+    
     <li><a href="/tags#machine-learning">machine-learning</a></li>
-    ]
+    
 </ul>
 
 </div>
-    </div>
+        </div>
+        <!-- prevent design from breaking -->
+        <div style="clear: both"></div>
 
-    <hr>
-    <div><ul>
+        <hr>
+        <div><ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#pipeline">Pipeline</a></li>
 <li><a href="#perceptron-algorithm">Perceptron Algorithm</a></li>
@@ -111,8 +114,8 @@
 <li><a href="#recurrent-neural-networks-rnns">Recurrent Neural Networks (RNNs)</a></li>
 </ul></div>
 
-    <hr>
-    <div>
+        <hr>
+        <div>
 <h1 id="introduction">Introduction</h1>
 
 <p>Let’s some things about machine learning. <strong><em>Machine learning is nothing but a combination of beautiful math and programming.</em></strong></p>
@@ -156,12 +159,12 @@
 <p>What is the purpose of activation functions or non-linear functions? Say we have the following features $ x_1, x_2 $ and weights $ \mathcal{W} = [w_1, w_2] $. By multiplying the features by the model weights, there is some linear transformation of the feature space. However, it is impossible to separate the features <strong>without any nonlinear function</strong>.</p>
 
 <figure>
-    <img class="wrap img" src="./nonlinearly-separable.png">
+    <img src="./nonlinearly-separable.png">
     <figcaption class="caption">Data is not linearly separable</figcaption>
 </figure>
 
 <figure>
-    <img class="wrap" src="./linearly-separable.png">
+    <img src="./linearly-separable.png">
     <figcaption class="caption">Linearly separable data after transformation</figcaption>
 </figure>
 
@@ -202,13 +205,14 @@
 <p>…</p>
 </div>
 
-    <hr>
-    
-    <div>
-        <h1>References</h1>
-        <ol class="bibliography"><li><span id="zeiler2013visualizing">Zeiler, M. D., &amp; Fergus, R. (2013). <i>Visualizing and Understanding Convolutional Networks</i>.</span></li></ol>
+        <hr>
+        
+        <div>
+            <h1>References</h1>
+            <ol class="bibliography"><li><span id="zeiler2013visualizing">Zeiler, M. D., &amp; Fergus, R. (2013). <i>Visualizing and Understanding Convolutional Networks</i>.</span></li></ol>
+        </div>
+        
     </div>
-    
 </div>
 </div></body>
 </div>
