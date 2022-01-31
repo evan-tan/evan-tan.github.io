@@ -75,6 +75,8 @@
 <ul class="tags page-links">
     <!-- ensure outer for loop uses 'page' variable -->
     
+    <li><a href="/tags#deep-learning">deep-learning</a></li>
+    
     <li><a href="/tags#machine-learning">machine-learning</a></li>
     
 </ul>
@@ -88,7 +90,6 @@
         <div><ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#pipeline">Pipeline</a></li>
-<li><a href="#perceptron-algorithm">Perceptron Algorithm</a></li>
 <li>
 <a href="#linear-models">Linear Models</a><ul>
 <li><a href="#linear-regression">Linear Regression</a></li>
@@ -97,42 +98,38 @@
 </li>
 <li><a href="#modelling-space--feature-engineering">Modelling Space &amp; Feature Engineering</a></li>
 <li><a href="#activation-functions">Activation Functions</a></li>
-<li><a href="#model-convergence">Model Convergence</a></li>
 <li>
 <a href="#hyperparameters">Hyperparameters</a><ul>
 <li><a href="#learning-rate">Learning Rate</a></li>
-<li><a href="#learning-rate-scheduler">Learning Rate Scheduler</a></li>
+<li><a href="#schedulers">Schedulers</a></li>
 </ul>
 </li>
 <li>
 <a href="#convolutional-neural-networks-cnns">Convolutional Neural Networks (CNNs)</a><ul>
-<li><a href="#convolution-operation">Convolution Operation</a></li>
-<li><a href="#what-do-cnns-see">What do CNNs see?</a></li>
-<li><a href="#when-to-use-minpool-maxpool-and-avgpool">When to use MinPool, MaxPool, and AvgPool?</a></li>
+<li><a href="#cnn-layer-output-visualized">CNN Layer Output Visualized</a></li>
+<li><a href="#occlusion-sensitivity-study">Occlusion Sensitivity Study</a></li>
 </ul>
 </li>
-<li><a href="#recurrent-neural-networks-rnns">Recurrent Neural Networks (RNNs)</a></li>
+<li>
+<a href="#random-notes">Random Notes</a><ul><li><a href="#a-general-equation">A General Equation</a></li></ul>
+</li>
 </ul></div>
 
         <hr>
         <div>
 <h1 id="introduction">Introduction</h1>
 
-<p>Let’s some things about machine learning. <strong><em>Machine learning is nothing but a combination of beautiful math and programming.</em></strong></p>
+<p>Let’s clear up some things about machine learning. <strong><em>Machine learning is nothing but a combination of beautiful math and programming.</em></strong></p>
 
 <p>Why did I pour more effort into this university unit compared to my final year project (FYP)? I did this because while I had managed to <a href="https://github.com/evantancy/ece4078-team2-05" target="_blank" rel="noopener noreferrer">train and deploy models like YOLOv4 onto a robot</a>, or was <a href="https://github.com/evantancy/CrowdNav_DSRNN" target="_blank" rel="noopener noreferrer">diving deep with reward shaping for my FYP</a>, <strong>machine learning</strong> felt like a big black box that I place data and train something to output some numbers. <em>What was I training? What was the training process? What did the numbers mean?</em> I’m pretty happy I put more time into this unit and finished off strong with <a href="/projects/deep-rl-intelligent-traffic-management/index">a group project with reinforcement learning.</a></p>
 
-<p>This module primarily focuses on convolutional neural networks (CNNs) which is what will be discussed in this post.</p>
+<p>This module primarily focused on convolutional neural networks (CNNs), which was pretty fascinating given my interest in computer vision and my past internship with <a href="https://www.aidrivers.ai/" target="_blank" rel="noopener noreferrer">AIDrivers</a> where I used instance segmentation for a project.</p>
 
 <h1 id="pipeline">Pipeline</h1>
 
-<p>Machine learning requires data. <strong>A lot of it.</strong> These come in the form of labelled or un-labelled data. Certain features are created from the data as input features for a model. At the start, the weights of the model are randomly initialized. During training, the model weights are being optimized using backpropagation and gradient descent, which provides a magnitude and direction to update the weights in a way that minimizes the <em>loss</em> i.e. the difference between a model’s prediction and the ground truth of the input data.</p>
+<p>Machine learning requires data. <strong>A lot of it.</strong> These come in the form of labelled or un-labelled data. Certain features are created from the data as input features for a model. At the start, the weights of the model are initialized. During training, the model weights are being optimized using backpropagation and gradient descent, which provides a magnitude and direction to update the weights in a way that minimizes the <em>loss</em> i.e. the difference between a model’s prediction and the ground truth of the input data.</p>
 
 <p>The model iteratively learns the data by reducing the difference between its predictions and the true label. with randomly initialized predicts the class of the input and the loss is some difference between the true label and predicted label.</p>
-
-<h1 id="perceptron-algorithm">Perceptron Algorithm</h1>
-
-<p>…</p>
 
 <h1 id="linear-models">Linear Models</h1>
 
@@ -140,11 +137,11 @@
 
 <h2 id="linear-regression">Linear Regression</h2>
 
-<p>The loss function for linear regression is as follows.</p>
+<p>The loss function for linear regression is stated below, where $\sigma$ represents the sigmoid function, and $\hat{y}$ represents the model’s prediction.</p>
 
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi mathvariant="script">L</mi><mrow><mi>S</mi><mi>E</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo separator="true">,</mo><mtext>where w = weights and b = biases</mtext></mrow><annotation encoding="application/x-tex">\mathcal{L}_{SE}=\frac{1}{m}\sum_{i=1}^{N}(\hat{y}-y_{i})^{2}, \text{where w = weights and b = biases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">SE</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.106005em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">m</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord">where w = weights and b = biases</span></span></span></span></span></span>
 
-<p>This is also known as the Least Squares Error (LSE) as it calculates the …</p>
+<p>This is also known as the Least Squares Error (LSE) as it calculates the squared error between each data point and the model’s prediction.</p>
 
 <h2 id="logistic-regression">Logistic Regression</h2>
 
@@ -154,62 +151,136 @@
 
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">L</mi><mo stretchy="false">(</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mi>y</mi><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mi>σ</mi><mo stretchy="false">(</mo><msup><mi>w</mi><mi>T</mi></msup><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false">)</mo><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mo stretchy="false">(</mo><msup><mi>w</mi><mi>T</mi></msup><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{L}(\hat{y},y)=-ylog(\sigma(w^{T}x)-(1-y)log(1-\sigma(w^{T}x))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathcal">L</span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1413309999999999em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913309999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mclose">))</span></span></span></span></span>
 
+<p>Both linear &amp; logistic regression are used in binary classification problems, where the logistic model’s prediction of $\hat{y}=0.2$ represents an estimate for $P(y=0)=0.8$ and $P(y=1)=0.2$.</p>
+
 <h1 id="modelling-space--feature-engineering">Modelling Space &amp; Feature Engineering</h1>
 
-<p>What is the purpose of activation functions or non-linear functions? Say we have the following features $ x_1, x_2 $ and weights $ \mathcal{W} = [w_1, w_2] $. By multiplying the features by the model weights, there is some linear transformation of the feature space. However, it is impossible to separate the features <strong>without any nonlinear function</strong>.</p>
+<p>What is the purpose of activation functions or non-linear functions? Say we have the following features $ x_1, x_2 $ and weights $ \mathcal{W} = [w_1, w_2] $. By multiplying the features by the model weights, there is some linear transformation of the feature space. However, it is impossible to separate the features <strong>without any nonlinear function</strong>, as seen by the different coloured circles in first image below.</p>
 
 <figure>
-    <img src="./nonlinearly-separable.png">
+    <img class="image-full" src="./nonlinearly-separable.png">
     <figcaption class="caption">Data is not linearly separable</figcaption>
 </figure>
 
 <figure>
-    <img src="./linearly-separable.png">
+    <img class="image-full" src="./linearly-separable.png">
     <figcaption class="caption">Linearly separable data after transformation</figcaption>
 </figure>
 
+<p>However, by applying some non-linear activation function, in particular the Rectified Linear Unit (ReLU) function, transformation of the feature space allows the data to be separated by some boundary.</p>
+
+<p>This was also seen in <a href="https://github.com/evantancy/ece4179/blob/main/assignments/assignment_1/hw1.ipynb" target="_blank" rel="noopener noreferrer">my first assignment</a>, where given some data with features $x_1, and x_2$ and using the recommended 5D feature space mapping from $ \mathbb{R}^2=(x_1, x_2)^T to \mathbb{R}^5=(x_1, x_2, x_1^2, x_2^2, x_{1}x_{2})^T $ achieves poor model performance of 47.0% but by adding an additional dimension (bias) to the feature space (making it 6D) the parameter allows the dimensions of the ellipsoid to change and achieves 93.5% accuracy.</p>
+
+<div>
+<figure>
+    <img class="image-half" src="./features-5d.png">
+    <figcaption class="caption">5D feature space, <b>47% accuracy</b></figcaption>
+</figure>
+
+<figure>
+    <img class="image-half" src="./features-6d.png">
+    <figcaption class="caption">6D feature space, <b>93.5% accuracy</b></figcaption>
+</figure>
+</div>
+
 <h1 id="activation-functions">Activation Functions</h1>
 
-<p>Purpose …</p>
+<p>There are <a href="https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity" target="_blank" rel="noopener noreferrer">many activation functions available here</a> in PyTorch, but personally I have mostly used Rectified Linear Unit (ReLU), LeakyReLU, Tanh as well as implemented the simple Sigmoid function.</p>
 
-<ul>
-  <li>Sigmoid</li>
-  <li>ReLU</li>
-  <li>LeakyReLU</li>
-  <li>Tanh</li>
-</ul>
+<p>When performing <em>computer vision</em> based tasks, ReLU is typically used and is quite effective but it suffers from the <strong>Dying ReLU problem</strong> whereby all negative inputs to the function output <strong>zero</strong> and the neurons are basically dead. LeakyReLU combats this problem using a small factor, typically 0.01, so there is some small non-zero gradient. However, this does not mean that LeakyReLU is superior to plain ReLU and results may vary depending on the problem.</p>
 
-<h1 id="model-convergence">Model Convergence</h1>
-<p>…</p>
+<p>In deep reinforcement learning, I’ve come across Tanh activation functions which were used for both Recurrent Neural Networks (RNNs) and Multi-Layer Perceptron (MLP) networks. Perhaps this could be due to the Tanh function being centered at 0 whereas ReLU isn’t. Additionally, Tanh outputs are in the range [-1,1] whereas that of ReLU is in [0,1].</p>
 
 <h1 id="hyperparameters">Hyperparameters</h1>
 
 <h2 id="learning-rate">Learning Rate</h2>
-<p>If learning rate is too high, the model may converge but overshoot beyond the point of optimality. If learning rate is too low, the model might not converge at all.</p>
+<p>If learning rate (LR) is too high, the model may converge but overshoot beyond the point of optimality. If learning rate is too low, the model might not converge at all.</p>
 
-<h2 id="learning-rate-scheduler">Learning Rate Scheduler</h2>
-<p>OneCycleLR</p>
+<h2 id="schedulers">Schedulers</h2>
+<p>Learning rate is quite annoying to tune and several runs need to be performed in order to find the <strong>ideal learning rate</strong>, but what if the ideal learning rate exists in a range instead of being a singular value? <a class="citation" href="#leslie2017superconvergence">(Smith &amp; Topin, 2017)</a> proposes the use of <em>cyclical learning rates</em>, where instead of trying to pinpoint a specific lr, a lower and upper bound should be specified with parameters to determine the scheduler’s increment/decay over time.</p>
+
+<figure>
+    <img class="image-half" src="./onecycle.svg">
+    <figcaption class="caption">OneCycleLR learning rate over time</figcaption>
+</figure>
+
+<p>The example above has an initial lr of 0.004, maximum lr of 0.1, with a ramp-up period of 300 out of 1000 iterations. The ramp-up iterations act as warm-up iterations, during the initial stage where lr increases. This benefits training by reducing any bias from data seen earlier by the model.</p>
+
+<p>Check out Leslie’s <a href="https://www.youtube.com/watch?v=bR7z2MA0p-o" target="_blank" rel="noopener noreferrer">presentation video.</a></p>
 
 <h1 id="convolutional-neural-networks-cnns">Convolutional Neural Networks (CNNs)</h1>
 
-<h2 id="convolution-operation">Convolution Operation</h2>
-<p>…</p>
+<p>Traditionally in computer vision, kernels which are patches of $n$ x $n$ pixels slide over the image in order to detect corners, edges, features, or blur the image, etc and each kernel value had to be manually set. CNNs turn traditionally fixed kernel values into learnable parameters and allow for multiple feature maps. Anybody can head to the PyTorch / TensorFlow tutorial and easily stich a CNN together, <em>but what do these CNN layers output?</em></p>
 
-<h2 id="what-do-cnns-see">What do CNNs see?</h2>
-<p>Anyone can go onto the PyTorch tutorials, rip off the code and train a CNN, but what do convolutional layers output? <a class="citation" href="#zeiler2013visualizing">(Zeiler &amp; Fergus, 2013)</a>.</p>
+<h2 id="cnn-layer-output-visualized">CNN Layer Output Visualized</h2>
 
-<h2 id="when-to-use-minpool-maxpool-and-avgpool">When to use MinPool, MaxPool, and AvgPool?</h2>
-<p>…</p>
+<p>When training a simple AutoEncoder with the architecture below, where <strong>N=16</strong> or <strong>N=64</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td>
+<td class="rouge-code"><pre>        input features
+        |
+        fc1 (4096,N)
+        |
+        ReLU
+        |
+        fc2 (N, 4096)
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
 
-<h1 id="recurrent-neural-networks-rnns">Recurrent Neural Networks (RNNs)</h1>
-<p>…</p>
+<figure>
+    <img class="image-full" src="./ae16-eigenfaces.svg">
+    <figcaption class="caption">N=16, fc1 layer output visualized</figcaption>
+</figure>
+
+<figure>
+    <img class="image-full" src="./ae64-eigenfaces.svg">
+    <figcaption class="caption">N=64, fc1 layer output visualized</figcaption>
+</figure>
+
+<p>This very closely resembers eigenfaces during human face recognition, and it is pretty cool to see many more variations modelled in the larger model, which shows that a larger model has more model capacity or representational power.</p>
+
+<h2 id="occlusion-sensitivity-study">Occlusion Sensitivity Study</h2>
+
+<p>After training a custom neural network for the <a href="https://cs.stanford.edu/~acoates/stl10/" target="_blank" rel="noopener noreferrer">STL dataset</a>, I studied the effect of <strong>removing certain patches of pixels</strong> as done by <a class="citation" href="#zeiler2013visualizing">(Zeiler &amp; Fergus, 2013)</a> in order to visualize the effect of removing certain pixels on a model’s predictions.</p>
+
+<p>Below a kernel of size 2 x 2 and a stride of 2 was used, and the top 5 predictions for each class were selected. While each colorbar’s prediction score is minisclue in difference, it’s interesting to see that removing pixels in the background that are on the edge of the objects leads to lower prediction scores. By using a small kernel, the outputs don’t show anything significant.</p>
+
+<p>Furthermore, by increasing the kernel size to 8 x 8 and stride to 8 there is no visible difference between the feature patches which allow the model to correctly predict the class of the objects.</p>
+
+<figure>
+    <img class="image-full" src="./heatmap-k2-s2-correct-pred.svg">
+    <figcaption class="caption">Occlusion with kernel size 2 x 2 and stride 2</figcaption>
+</figure>
+
+<p><br></p>
+
+<figure>
+    <img class="image-full" src="./heatmap-k8-s8-correct-pred.svg">
+    <figcaption class="caption">Occlusion with kernel size 8 x 8 and stride 8</figcaption>
+</figure>
+
+<h1 id="random-notes">Random Notes</h1>
+<h2 id="a-general-equation">A General Equation</h2>
+<p>Leslie Smith in his presentation video, proposes a general equation to balance for machine learning.</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mtext>learning rate</mtext><mo>∗</mo><mtext>weight decay</mtext></mrow><mrow><mtext>batch size</mtext><mo>∗</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mtext>momentum</mtext><mo stretchy="false">)</mo></mrow></mfrac><mo>=</mo><mi>k</mi><mo separator="true">,</mo><mtext>where k is a constant</mtext></mrow><annotation encoding="application/x-tex">\frac{\text{learning rate} * \text{weight decay}} {\text{batch size} * (1-\text{momentum})}=k, \text{where k is a constant}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.3074399999999997em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">batch size</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord text"><span class="mord">momentum</span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">learning rate</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord text"><span class="mord">weight decay</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord">where k is a constant</span></span></span></span></span></span>
 </div>
 
         <hr>
         
         <div>
             <h1>References</h1>
-            <ol class="bibliography"><li><span id="zeiler2013visualizing">Zeiler, M. D., &amp; Fergus, R. (2013). <i>Visualizing and Understanding Convolutional Networks</i>.</span></li></ol>
+            <ol class="bibliography">
+<li><span id="leslie2017superconvergence">Smith, L. N., &amp; Topin, N. (2017). Super-Convergence: Very Fast Training of Residual Networks Using Large Learning Rates. <i>CoRR</i>, <i>abs/1708.07120</i>. http://arxiv.org/abs/1708.07120</span></li>
+<li><span id="zeiler2013visualizing">Zeiler, M. D., &amp; Fergus, R. (2013). Visualizing and Understanding Convolutional Networks. <i>CoRR</i>, <i>abs/1311.2901</i>. http://arxiv.org/abs/1311.2901</span></li>
+</ol>
         </div>
         
     </div>
