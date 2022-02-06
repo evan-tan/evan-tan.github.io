@@ -1,5 +1,7 @@
 # evantancy.github.io
+All code and files for [my personal website.](https://evantancy.github.io/)
 
+# Running Locally
 To preview locally, first install bundle, ruby-dev and jekyll
 ```bash
 # install dependencies
@@ -21,8 +23,8 @@ rougify help style
 rougify style github > ./path/style.css
 ```
 # Credits
-[Gregory Gundersen's blog](https://gregorygundersen.com/) which focuses on simplicity and technical writing instead of style.
-[Jekyll ToC](https://github.com/allejo/jekyll-toc) for automated generation of table of contents with no plugins.
+- [Gregory Gundersen's blog](https://gregorygundersen.com/) which focuses on simplicity and technical writing instead of style.
+- [Jekyll ToC](https://github.com/allejo/jekyll-toc) for automated generation of table of contents with no plugins.
 
 # TODO
 - ~~enable jekyll-scholar for bibliography~~
