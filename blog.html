@@ -1,0 +1,20 @@
+---
+title: Blog
+layout: default
+---
+
+{% assign ordered_posts = site.posts | sort: "date" %}
+<div class="wrap">
+    {% for page in ordered_posts reversed%}
+    <div class="page-index">
+        <a href="{{ page.url }}" class="page-index-title">{{ page.title }}</a>
+        <div>
+            <div class="alignable page-date">
+                {{ page.date | date: "%-d %B %Y" | upcase}}
+            </div>
+            <div>{{ page.description }}</div>
+            <div>{% include post-tags.html %}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

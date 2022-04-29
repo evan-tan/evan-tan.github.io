@@ -1,0 +1,318 @@
+---
+---
+
+// fonts
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+// defining variables
+$font-code: "JetBrains Mono", monospace;
+$font-base: "Lato", Helvetica, arial, sans-serif;
+$color-base: rgba(0, 0, 0, 0.8);
+$color-code-border: #dadada;
+$color-code-bg: #f8f8f8;
+$color-code-bg-inline: #e6e6e6;
+$color-link: $color-base;
+$color-link-hover: rgba(0, 0, 0, 0.6);
+$color-nav-link: $color-link-hover;
+$color-bib: rgba(0, 0, 0, 0.65);
+$color-caption: rgba(0, 0, 0, 0.5);
+$min-width: 400px;
+$max-width: 700px;
+
+// all html elements
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 22px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+h6 {
+    font-size: 14px;
+}
+
+html {
+    font-family: $font-base;
+    color: $color-base;
+    line-height: 1.5em;
+    text-size-adjust: 100%;
+    padding: 6px;
+}
+
+a {
+    color: $color-link;
+}
+
+// remove underline during hover
+a:hover {
+    text-decoration: none;
+    color: $color-link-hover;
+}
+
+// code syntax highlighting
+code {
+    font-family: $font-code;
+}
+
+pre {
+    font-family: $font-code;
+    font-size: 14px;
+}
+
+// table formatting
+thead th {
+    padding: 2.5px;
+}
+
+tbody td {
+    padding: 0 5px 0 5px;
+}
+
+// remove indentation for ul
+ul {
+    padding-left: 1.1em;
+}
+
+// code formatting
+
+// enable scrolling for long lines of code
+.highlight pre {
+    overflow-x: auto;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+// add background for inline code
+.highlighter-rouge {
+    background-color: $color-code-bg-inline;
+}
+
+// line number background color
+.rouge-gutter {
+    color: $color-code-border;
+}
+
+.filename {
+    overflow-x: auto;
+    font-family: $font-code;
+    background-color: $color-code-border;
+    margin-bottom: 0;
+    padding-bottom: 1px;
+    padding-left: 1.6em;
+    padding-top: 4px;
+}
+
+// nav bar
+
+#author-name {
+    font-size: 30px;
+    color: #272727;
+    display: inline-block;
+}
+
+#nav-links a:hover {
+    font-weight: bold;
+}
+
+.nav {
+    padding: 50px 0 50px 0;
+}
+
+.nav a {
+    color: $color-nav-link;
+    text-decoration: none;
+}
+
+.nav-ul {
+    display: inline-block;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.nav-li {
+    list-style-type: none;
+    margin: 0 10px 0 10px;
+}
+
+// remove padding and bullets of lists
+.clean-ul {
+    padding: 0;
+    list-style-type: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+// turn list horizontal with small margin
+.horizontal-li li {
+    display: inline;
+    margin-right: 5px;
+}
+
+.wrap {
+    margin: 0 auto;
+    min-width: $min-width;
+    max-width: $max-width;
+}
+
+// floating and alignment
+
+.alignable {
+    display: inline-block;
+}
+
+.pull-left {
+    @extend .alignable;
+    float: left;
+}
+
+.pull-right {
+    @extend .alignable;
+    float: right;
+}
+
+// page
+
+.page-index {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.page-index-title {
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.page-date {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.page-title {
+    font-weight: bold;
+    font-size: 28px;
+    padding-bottom: 10px;
+}
+// page links, controls both tags and code/paper links
+.page-links {
+    font-size: 14px;
+}
+
+.post-links {
+    margin-top: 5px;
+}
+
+.bibliography {
+    color: $color-bib;
+    font-size: 12px;
+}
+
+.table-bordered {
+    border-collapse: collapse;
+    text-align: center;
+
+    > table,
+    td,
+    th {
+        border: 1px solid black;
+    }
+}
+
+// tag list & page links
+
+.tags li {
+    display: inline;
+    margin: 0 0 0 0;
+}
+
+.tags,
+.page-links li:before {
+    content: " / ";
+}
+
+.tags,
+.page-links li:first-child:before {
+    content: "";
+}
+
+// image related
+
+.image-full {
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+.image-half {
+    display: block;
+    height: auto;
+    width: 50%;
+    margin: 0 auto;
+}
+
+figure {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.caption {
+    color: $color-caption;
+    text-align: center;
+}
+
+// responsiveness
+
+@media screen and (max-width: 700px) {
+    .katex-display > .katex {
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 100%;
+        overflow-x: scroll;
+        text-align: initial;
+    }
+    .katex {
+        font: normal 1.21em KaTeX_Main, Times New Roman, serif;
+        line-height: 1.2;
+        white-space: normal;
+        text-indent: 0;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #author-name {
+        width: 100%;
+        float: none;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+    #nav-links {
+        text-align: center;
+        width: 100%;
+    }
+
+    #nav-links .pull-right {
+        float: none;
+    }
+
+    #nav-links .pull-left {
+        float: none;
+    }
+}

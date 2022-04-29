@@ -1,0 +1,39 @@
+name: Build
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch "source"
+        uses: actions/checkout@v2
+        with:
+          ref: source
+      - name: Build jekyll site
+        run: |
+          set -xo pipefail
+          rm -rf _site/*
+          docker run --rm --volume="$PWD:/srv/jekyll" \
+          --user $(id -u):$(id -g) \
+          -i evantancy/evan-tan.github.io:latest jekyll build
+      - name: Deploy jekyll site
+        if: ${{ github.ref }} == 'refs/head/source'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -xo pipefail
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git fetch
+          git checkout main
+          ls -Q | grep -v _site | xargs rm -rf  # remove all EXCEPT for _site/
+          mv _site/* .                          # unpack contents
+          rmdir _site                           # remove empty dir
+          rm -rf .jekyll-cache                  # remove cache
+          [[ -n "$(git status --porcelain)" ]] || exit 0  # see modified files
+          git add .
+          git commit -m "Build $(git rev-parse source | grep -o '^.\{10\}')"
+          git push "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" main

@@ -1,0 +1,32 @@
+---
+title: Projects
+layout: default
+---
+
+<!-- Use the following 2 lines to sort by dates -->
+<!--
+{% assign ordered_projects = site.projects | sort: "date" %}
+{% for proj in ordered_projects reversed%}
+{% endfor %} <- properly position this
+-->
+
+{% assign ordered_projects = site.projects | sort: "order" | reversed %}
+<div class="wrap">
+    {% for page in ordered_projects %}
+    <div class="page-index">
+        <a href="{{ page.url }}" class="page-index-title">{{ page.title }}</a>
+        <div>
+            <div class="alignable page-date">
+                {{ page.date | date: "%-d %B %Y" | upcase}}
+            </div>
+            <div>{{ page.description }}</div>
+            <div>
+                <div class="alignable">{% include project-links.html %}</div>
+                <div class="alignable pull-right">
+                    {% include post-tags.html %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

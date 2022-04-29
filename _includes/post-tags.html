@@ -1,0 +1,8 @@
+{% if page.tags.size > 0 %}
+<ul class="tags page-links clean-ul">
+    <!-- ensure outer for loop uses 'page' variable -->
+    {% for tag in page.tags %}
+    <li><a href="/tags#{{ tag }}">{{ tag }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}

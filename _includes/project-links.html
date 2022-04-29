@@ -1,0 +1,7 @@
+<ul class="page-links horizontal-li clean-ul">
+    {% for _keyval in page.links %} {% assign text = _keyval[0] %} {% assign
+    link = _keyval[1] %} {% if text contains "paper" %} {% assign link =
+    page.url | remove: "/index" | append: "/" |append: link %} {% endif %}
+    <li><a href="{{ link }}">{{ text }}</a></li>
+    {% endfor %}
+</ul>

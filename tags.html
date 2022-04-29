@@ -1,0 +1,24 @@
+---
+layout: default
+---
+
+<div class="wrap">
+    <div class="page-index">
+        <!-- join the all collections from posts and projects -->
+        {% assign collections = site.posts | concat: site.projects %} {% assign
+        tags_grouped = collections | map: 'tags' | join: ',' | split: ',' |
+        group_by: tag%} {% assign tags_grouped = tags_grouped | sort_natural %}
+        {% for tag in tags_grouped %}
+
+        <!-- allow links with url#tag -->
+        <div class="page-index-title" id="{{ tag.name }}">
+            {{ tag.name }} | {{ tag.size }}
+        </div>
+        <ul>
+            {% for item in collections %} {% if item.tags contains tag.name %}
+            <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+            {% endif %} {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+</div>

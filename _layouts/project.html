@@ -1,0 +1,36 @@
+---
+layout: default
+---
+
+<body>
+    {% include katex.html %}
+    <div class="wrap">
+        <div>
+            <p class="page-title">{{ page.title }}</p>
+            <p class="page-date">
+                PUBLISHED<br />
+                {{ page.date | date: "%-d %B %Y" | upcase}}
+            </p>
+        </div>
+        <div class="clean-ul">
+            <div class="alignable">{% include project-links.html %}</div>
+            <div class="alignable pull-right">{% include post-tags.html %}</div>
+        </div>
+        <!-- prevent design from breaking -->
+        <div style="clear: both"></div>
+
+        <hr />
+        <div>{% include toc.html html=content %}</div>
+
+        <hr />
+        <div>{{ content }}</div>
+
+        <hr />
+        {% if page.references %}
+        <div>
+            <h1>References</h1>
+            {% bibliography --cited %}
+        </div>
+        {% endif %}
+    </div>
+</body>

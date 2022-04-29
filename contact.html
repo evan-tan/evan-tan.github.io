@@ -1,0 +1,71 @@
+---
+title: Contact
+layout: default
+---
+
+<div class="wrap">
+    <div class="page-index">
+        <div>
+            <ul class="clean-ul">
+                <li>
+                    <a
+                        id="mlink"
+                        href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x62;&#x77;&#x72;&#x31;&#x76;&#x78;&#x66;&#x74;&#x6C;&#x40;&#x6D;&#x6F;&#x7A;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;"
+                        >email me</a
+                    >
+                </li>
+                {% if site.accounts.linkedin %}
+                <li>
+                    <a
+                        href="https://www.linkedin.com/in/{{ site.accounts.linkedin }}"
+                        target="_blank"
+                        >LinkedIn</a
+                    >
+                </li>
+                {% endif %} {% if site.accounts.github %}
+                <li>
+                    <a
+                        href="https://github.com/{{ site.accounts.github }}"
+                        target="_blank"
+                        >GitHub</a
+                    >
+                </li>
+                {% endif %} {% if site.accounts.twitter %}
+                <li>
+                    <a
+                        href="https://twitter.com/{{ site.accounts.twitter }}"
+                        target="_blank"
+                        >Twitter</a
+                    >
+                </li>
+                {% endif %} {% if site.accounts.opensea %}
+                <li>
+                    <a
+                        href="https://opensea.io/{{ site.accounts.opensea }}"
+                        target="_blank"
+                        >OpenSea</a
+                    >
+                </li>
+                {% endif %} {% if site.accounts.stackoverflow %}
+                <li>
+                    <a
+                        href="https://stackoverflow.com/users/{{ site.accounts.stackoverflow }}"
+                        target="_blank"
+                        >StackOverflow</a
+                    >
+                </li>
+                {% endif %} {% if site.accounts.kaggle %}
+                <li>
+                    <a
+                        href="https://www.kaggle.com/{{ site.accounts.kaggle }}"
+                        target="_blank"
+                        >Kaggle</a
+                    >
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% include footer.html %}
